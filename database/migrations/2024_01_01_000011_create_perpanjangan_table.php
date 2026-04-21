@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('perpanjangan', function (Blueprint $table) {
+            $table->id('id_perpanjangan');
+            $table->foreignId('penempatan_id')->constrained('penempatan', 'id_penempatan')
+                  ->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('mahasiswa_id')->constrained('mahasiswa', 'id_mahasiswa')
+                  ->cascadeOnUpdate()->restrictOnDelete();
+            $table->dateTime('tgl_ajuan');
+            $table->date('periode_baru');
+            $table->enum('status', ['Pending', 'Disetujui', 'Ditolak'])
+                  ->default('Pending');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('perpanjangan');
+    }
+};
