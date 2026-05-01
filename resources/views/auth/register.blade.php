@@ -1,9 +1,9 @@
+{{-- resources/views/auth/register.blade.php --}}
 <x-auth-layout>
-    <x-slot:title>Masuk | SIHUM UNSRI</x-slot:title>
+    <x-slot:title>Daftar | SIHUM UNSRI</x-slot:title>
 
     <section class="flex min-h-screen items-center px-4 py-12">
-        <div class="mx-auto w-full items-center justify-center gap-10">
-            {{-- Form --}}
+        <div class="mx-auto w-full items-center justify-center">
             <div class="mx-auto w-full max-w-md rounded-3xl bg-bg-base p-8 shadow-xl shadow-slate-200/70">
 
                 {{-- Logo --}}
@@ -17,11 +17,35 @@
                 </div>
 
                 <h2 class="text-xl font-semibold">
-                    Masuk ke akun
+                    Buat akun mahasiswa
                 </h2>
 
                 <form method="POST" action="#" class="mt-6 space-y-5">
                     @csrf
+
+                    <div>
+                        <label class="text-sm font-medium">
+                            Nama Lengkap
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
+                            placeholder="Nama lengkap"
+                        >
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-medium">
+                            NIM
+                        </label>
+                        <input
+                            type="text"
+                            name="nim"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
+                            placeholder="Nomor Induk Mahasiswa"
+                        >
+                    </div>
 
                     <div>
                         <label class="text-sm font-medium">
@@ -43,32 +67,33 @@
                             type="password"
                             name="password"
                             class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
-                            placeholder="Masukkan password"
+                            placeholder="Minimal 8 karakter"
                         >
                     </div>
 
-                    <div class="flex items-center justify-between text-sm">
-                        <label class="flex items-center gap-2 text-content-sub">
-                            <input type="checkbox" class="rounded">
-                            Ingat saya
+                    <div>
+                        <label class="text-sm font-medium">
+                            Konfirmasi Password
                         </label>
-
-                        <a href="#" class="text-brand hover:underline">
-                            Lupa password?
-                        </a>
+                        <input
+                            type="password"
+                            name="password_confirmation"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
+                            placeholder="Ulangi password"
+                        >
                     </div>
 
                     <button
                         type="submit"
                         class="w-full rounded-xl bg-brand py-3 text-sm font-medium text-white shadow-sm hover:shadow-md"
                     >
-                        Masuk
+                        Daftar
                     </button>
 
                     <p class="text-center text-sm text-content-sub">
-                        Belum punya akun?
-                        <a href="{{ route('register') }}" class="text-brand font-medium">
-                            Daftar
+                        Sudah punya akun?
+                        <a href="{{ route('login') }}" class="text-brand font-medium">
+                            Masuk
                         </a>
                     </p>
 
