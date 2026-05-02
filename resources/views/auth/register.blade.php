@@ -4,6 +4,14 @@
 
     <section class="flex min-h-screen items-center px-4 py-12">
         <div class="mx-auto w-full items-center justify-center">
+
+            {{-- Tombol Back --}}
+            <div class="mx-auto mb-4 w-full max-w-md">
+                <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-sm font-medium text-content-sub transition hover:text-brand">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali ke Beranda
+                </a>
+            </div>
             <div class="mx-auto w-full max-w-md rounded-3xl bg-bg-base p-8 shadow-xl shadow-slate-200/70">
 
                 {{-- Logo --}}
@@ -20,61 +28,57 @@
                     Buat akun mahasiswa
                 </h2>
 
-                <form method="POST" action="#" class="mt-6 space-y-5">
+                <form method="POST" action="{{ route('register.post') }}" class="mt-6 space-y-5">
                     @csrf
 
+                    {{-- Nama Lengkap --}}
                     <div>
-                        <label class="text-sm font-medium">
-                            Nama Lengkap
-                        </label>
+                        <label class="text-sm font-medium">Nama Lengkap</label>
                         <input
                             type="text"
                             name="name"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
+                            value="{{ old('name') }}"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('name') ring-2 ring-red-400 @enderror"
                             placeholder="Nama lengkap"
+                            autofocus
                         >
+                        @error('name')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
+                    {{-- NIM --}}
                     <div>
-                        <label class="text-sm font-medium">
-                            NIM
-                        </label>
+                        <label class="text-sm font-medium">NIM</label>
                         <input
                             type="text"
                             name="nim"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
+                            value="{{ old('nim') }}"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('nim') ring-2 ring-red-400 @enderror"
                             placeholder="Nomor Induk Mahasiswa"
                         >
+                        @error('nim')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
+                    {{-- Password --}}
                     <div>
-                        <label class="text-sm font-medium">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
-                            placeholder="email@unsri.ac.id"
-                        >
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium">
-                            Password
-                        </label>
+                        <label class="text-sm font-medium">Password</label>
                         <input
                             type="password"
                             name="password"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('password') ring-2 ring-red-400 @enderror"
                             placeholder="Minimal 8 karakter"
                         >
+                        @error('password')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
+                    {{-- Konfirmasi Password --}}
                     <div>
-                        <label class="text-sm font-medium">
-                            Konfirmasi Password
-                        </label>
+                        <label class="text-sm font-medium">Konfirmasi Password</label>
                         <input
                             type="password"
                             name="password_confirmation"
