@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
 
     // Mahasiswa
     Route::get('/mahasiswa/dashboard', function () {
-        return view('pengelola.dashboard');
+        return view('mahasiswa.dashboard');
     })->name('mahasiswa.dashboard');
 });
 

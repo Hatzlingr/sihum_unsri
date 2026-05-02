@@ -41,11 +41,10 @@ class RegisterController extends Controller
             'password.confirmed'   => 'Konfirmasi password tidak cocok.',
         ]);
 
-        // Auto-generate username unik dari NIM
         $username = $validated['nim'];
 
         DB::transaction(function () use ($validated, $username) {
-            // Buat akun user
+
             $user = User::create([
                 'username'  => $username,
                 'password'  => $validated['password'], // Di-hash otomatis oleh cast
