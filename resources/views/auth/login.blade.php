@@ -28,23 +28,38 @@
                     Masuk ke akun
                 </h2>
 
+                {{-- Alert Success --}}
                 @if (session('success'))
-                    <div class="mt-4 rounded-xl bg-brand-light px-4 py-3 text-sm text-brand font-medium">
+                    <div class="mt-4 rounded-xl bg-green-50 p-4 text-sm text-green-800">
                         {{ session('success') }}
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login.post') }}" class="mt-6 space-y-5">
+                {{-- Alert Error --}}
+                @if ($errors->any())
+                    <div class="mt-4 rounded-xl bg-red-50 p-4">
+                        <ul class="list-inside list-disc text-sm text-red-800">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-5">
                     @csrf
 
                     <div>
-                        <label class="text-sm font-medium">NIM</label>
+                        <label class="text-sm font-medium">
+                            Username
+                        </label>
                         <input
                             type="text"
-                            name="nim"
-                            value="{{ old('nim') }}"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('nim') ring-2 ring-red-400 @enderror"
-                            placeholder="Nomor Induk Mahasiswa"
+                            name="username"
+                            value="{{ old('username') }}"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('username') ring-2 ring-red-500 @enderror"
+                            placeholder="username"
+                            required
                             autofocus
                         >
                         @error('nim')
@@ -57,8 +72,9 @@
                         <input
                             type="password"
                             name="password"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('password') ring-2 ring-red-400 @enderror"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('password') ring-2 ring-red-500 @enderror"
                             placeholder="Masukkan password"
+                            required
                         >
                         @error('password')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
@@ -70,10 +86,6 @@
                             <input type="checkbox" name="remember" class="rounded">
                             Ingat saya
                         </label>
-
-                        <a href="#" class="text-brand hover:underline">
-                            Lupa password?
-                        </a>
                     </div>
 
                     <button

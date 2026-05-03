@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 // ─────────────────────────────────────────
 // Public Pages
@@ -44,41 +46,90 @@ Route::post('/kontak', function () {
     // Handle contact form
 })->name('kontak.process');
 
-// ─────────────────────────────────────────
-// Auth Routes (Guest only)
-// ─────────────────────────────────────────
-
+// Authentication Routes
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+    // Login
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
-    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+    // Register
+    Route::get('/register', [RegisteredUserController::class, 'create'])
+        ->name('register');
+    Route::post('/register', [RegisteredUserController::class, 'store']);
 });
 
-Route::post('/logout', [LoginController::class, 'logout'])
+// Logout (untuk authenticated users)
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
 
-// ─────────────────────────────────────────
-// Authenticated Routes (placeholder)
-// ─────────────────────────────────────────
-
+// Dashboard Routes (Protected)
 Route::middleware('auth')->group(function () {
-    // Admin
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    
+    // Admin Dashboard
+    Route::prefix('admin')->name('admin.')->middleware('role:Admin')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
 
-    // Pengelola
-    Route::get('/pengelola/dashboard', function () {
-        return view('pengelola.dashboard');
-    })->name('pengelola.dashboard');
+        Route::get('/hunian', function () {
+            return view('admin.hunian.index');
+        })->name('hunian.index');
 
-    // Mahasiswa
-    Route::get('/mahasiswa/dashboard', function () {
-        return view('mahasiswa.dashboard');
-    })->name('mahasiswa.dashboard');
+        Route::get('/kamar', function () {
+            return view('admin.kamar.index');
+        })->name('kamar.index');
+
+        Route::get('/mahasiswa', function () {
+            return view('admin.mahasiswa.index');
+        })->name('mahasiswa.index');
+
+        Route::get('/pengelola', function () {
+            return view('admin.pengelola.index');
+        })->name('pengelola.index');
+
+        Route::get('/pendaftaran', function () {
+            return view('admin.pendaftaran.index');
+        })->name('pendaftaran.index');
+
+        Route::get('/penempatan', function () {
+            return view('admin.penempatan.index');
+        })->name('penempatan.index');
+
+        Route::get('/pembayaran', function () {
+            return view('admin.pembayaran.index');
+        })->name('pembayaran.index');
+
+        Route::get('/perpanjangan', function () {
+            return view('admin.perpanjangan.index');
+        })->name('perpanjangan.index');
+
+        Route::get('/pindah-kamar', function () {
+            return view('admin.pindah-kamar.index');
+        })->name('pindah-kamar.index');
+
+        Route::get('/dokumen-pendaftaran', function () {
+            return view('admin.dokumen-pendaftaran.index');
+        })->name('dokumen-pendaftaran.index');
+
+        Route::get('/activity-log', function () {
+            return view('admin.activity-log.index');
+        })->name('activity-log.index');
+    });
+
+    // Mahasiswa Dashboard
+    Route::prefix('mahasiswa')->name('mahasiswa.')->middleware('role:Mahasiswa')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('mahasiswa.dashboard');
+        })->name('dashboard');
+    });
+
+    // Pengelola Dashboard
+    Route::prefix('pengelola')->name('pengelola.')->middleware('role:Pengelola')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('pemilik-kos.dashboard');
+        })->name('dashboard');
+
+    });
 });
-
-?>
