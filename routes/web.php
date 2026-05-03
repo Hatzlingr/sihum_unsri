@@ -1,22 +1,18 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 
-// ─────────────────────────────────────────
+// Authentication Routes
+require __DIR__ . '/auth.php';
+
 // Public Pages
-// ─────────────────────────────────────────
-
 Route::get('/', function () {
     if (auth()->check()) {
         return match (auth()->user()->role) {
-            'Admin'     => redirect()->route('admin.dashboard'),
+            'Admin' => redirect()->route('admin.dashboard'),
             'Pengelola' => redirect()->route('pengelola.dashboard'),
             'Mahasiswa' => redirect()->route('mahasiswa.dashboard'),
-            default     => view('public.home'),
+            default => view('public.home'),
         };
     }
     return view('public.home');
@@ -46,27 +42,9 @@ Route::post('/kontak', function () {
     // Handle contact form
 })->name('kontak.process');
 
-// Authentication Routes
-Route::middleware('guest')->group(function () {
-    // Login
-    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
-    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-
-    // Register
-    Route::get('/register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-    Route::post('/register', [RegisteredUserController::class, 'store']);
-});
-
-// Logout (untuk authenticated users)
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
-
 // Dashboard Routes (Protected)
 Route::middleware('auth')->group(function () {
-    
+
     // Admin Dashboard
     Route::prefix('admin')->name('admin.')->middleware('role:Admin')->group(function () {
         Route::get('/dashboard', function () {
@@ -128,8 +106,7 @@ Route::middleware('auth')->group(function () {
     // Pengelola Dashboard
     Route::prefix('pengelola')->name('pengelola.')->middleware('role:Pengelola')->group(function () {
         Route::get('/dashboard', function () {
-            return view('pemilik-kos.dashboard');
+            return view('pengelola.dashboard');
         })->name('dashboard');
-
     });
 });
