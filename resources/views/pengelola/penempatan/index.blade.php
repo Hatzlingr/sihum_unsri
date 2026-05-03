@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Pemilik Kos - Penempatan')
-@section('heading', 'Pemilik Kos - Penempatan Kamar')
+@section('title', 'Pengelola - Penempatan')
+@section('heading', 'Pengelola - Penempatan Kamar')
 @section('subheading', 'Daftar penghuni berdasarkan kamar.')
 
 @section('content')

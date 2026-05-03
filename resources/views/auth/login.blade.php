@@ -1,9 +1,17 @@
+{{-- resources/views/auth/login.blade.php --}}
 <x-auth-layout>
     <x-slot:title>Masuk | SIHUM UNSRI</x-slot:title>
 
     <section class="flex min-h-screen items-center px-4 py-12">
         <div class="mx-auto w-full items-center justify-center gap-10">
-            {{-- Form --}}
+
+            {{-- Tombol Back --}}
+            <div class="mx-auto mb-4 w-full max-w-md">
+                <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-sm font-medium text-content-sub transition hover:text-brand">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali ke Beranda
+                </a>
+            </div>
             <div class="mx-auto w-full max-w-md rounded-3xl bg-bg-base p-8 shadow-xl shadow-slate-200/70">
 
                 {{-- Logo --}}
@@ -54,12 +62,13 @@
                             required
                             autofocus
                         >
+                        @error('nim')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
-                        <label class="text-sm font-medium">
-                            Password
-                        </label>
+                        <label class="text-sm font-medium">Password</label>
                         <input
                             type="password"
                             name="password"
@@ -67,6 +76,9 @@
                             placeholder="Masukkan password"
                             required
                         >
+                        @error('password')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="flex items-center justify-between text-sm">

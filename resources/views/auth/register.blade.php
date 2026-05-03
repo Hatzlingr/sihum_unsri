@@ -3,6 +3,14 @@
 
     <section class="flex min-h-screen items-center px-4 py-12">
         <div class="mx-auto w-full items-center justify-center">
+
+            {{-- Tombol Back --}}
+            <div class="mx-auto mb-4 w-full max-w-md">
+                <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-sm font-medium text-content-sub transition hover:text-brand">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali ke Beranda
+                </a>
+            </div>
             <div class="mx-auto w-full max-w-md rounded-3xl bg-bg-base p-8 shadow-xl shadow-slate-200/70">
 
                 {{-- Logo --}}
@@ -33,6 +41,7 @@
                 <form method="POST" action="{{ route('register') }}" class="mt-6 space-y-5">
                     @csrf
 
+                    {{-- Nama Lengkap --}}
                     <div>
                         <label class="text-sm font-medium">
                             Nama Lengkap <span class="text-red-500">*</span>
@@ -46,8 +55,12 @@
                             required
                             autofocus
                         >
+                        @error('name')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
+                    {{-- NIM --}}
                     <div>
                         <label class="text-sm font-medium">
                             NIM <span class="text-red-500">*</span>
@@ -60,8 +73,12 @@
                             placeholder="Nomor Induk Mahasiswa"
                             required
                         >
+                        @error('nim')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
+                    {{-- Password --}}
                     <div>
                         <label class="text-sm font-medium">
                             Program Studi <span class="text-red-500">*</span>
@@ -114,8 +131,12 @@
                             placeholder="Minimal 8 karakter"
                             required
                         >
+                        @error('password')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
+                    {{-- Konfirmasi Password --}}
                     <div>
                         <label class="text-sm font-medium">
                             Konfirmasi Password <span class="text-red-500">*</span>

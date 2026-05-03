@@ -1,16 +1,27 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
-// Home / Landing Page
+// ─────────────────────────────────────────
+// Public Pages
+// ─────────────────────────────────────────
+
 Route::get('/', function () {
+    if (auth()->check()) {
+        return match (auth()->user()->role) {
+            'Admin'     => redirect()->route('admin.dashboard'),
+            'Pengelola' => redirect()->route('pengelola.dashboard'),
+            'Mahasiswa' => redirect()->route('mahasiswa.dashboard'),
+            default     => view('public.home'),
+        };
+    }
     return view('public.home');
 })->name('home');
 
-
-// Hunian (Housing) Pages
 Route::get('/hunian', function () {
     return view('public.hunian.index');
 })->name('hunian.index');
@@ -19,7 +30,6 @@ Route::get('/hunian/{id}', function ($id) {
     return view('public.hunian.show');
 })->name('hunian.show');
 
-// Information Pages
 Route::get('/panduan', function () {
     return view('public.panduan');
 })->name('panduan');
@@ -113,8 +123,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', function () {
             return view('mahasiswa.dashboard');
         })->name('dashboard');
-
-        // TODO: Tambahkan route mahasiswa lainnya
     });
 
     // Pengelola Dashboard
@@ -123,6 +131,5 @@ Route::middleware('auth')->group(function () {
             return view('pemilik-kos.dashboard');
         })->name('dashboard');
 
-        // TODO: Tambahkan route pengelola lainnya
     });
 });
