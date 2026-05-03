@@ -20,18 +20,39 @@
                     Masuk ke akun
                 </h2>
 
-                <form method="POST" action="#" class="mt-6 space-y-5">
+                {{-- Alert Success --}}
+                @if (session('success'))
+                    <div class="mt-4 rounded-xl bg-green-50 p-4 text-sm text-green-800">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                {{-- Alert Error --}}
+                @if ($errors->any())
+                    <div class="mt-4 rounded-xl bg-red-50 p-4">
+                        <ul class="list-inside list-disc text-sm text-red-800">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-5">
                     @csrf
 
                     <div>
                         <label class="text-sm font-medium">
-                            Email
+                            Username
                         </label>
                         <input
-                            type="email"
-                            name="email"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
-                            placeholder="email@unsri.ac.id"
+                            type="text"
+                            name="username"
+                            value="{{ old('username') }}"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('username') ring-2 ring-red-500 @enderror"
+                            placeholder="username"
+                            required
+                            autofocus
                         >
                     </div>
 
@@ -42,20 +63,17 @@
                         <input
                             type="password"
                             name="password"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('password') ring-2 ring-red-500 @enderror"
                             placeholder="Masukkan password"
+                            required
                         >
                     </div>
 
                     <div class="flex items-center justify-between text-sm">
                         <label class="flex items-center gap-2 text-content-sub">
-                            <input type="checkbox" class="rounded">
+                            <input type="checkbox" name="remember" class="rounded">
                             Ingat saya
                         </label>
-
-                        <a href="#" class="text-brand hover:underline">
-                            Lupa password?
-                        </a>
                     </div>
 
                     <button
