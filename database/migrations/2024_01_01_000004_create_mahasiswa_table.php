@@ -14,6 +14,7 @@ return new class extends Migration
                   ->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('nim', 20)->unique();
             $table->string('nama', 100);
+            $table->string('email', 100)->unique();
             $table->string('prodi', 100);
             $table->boolean('status_kipk')->default(false);
             $table->string('no_hp', 15)->nullable();

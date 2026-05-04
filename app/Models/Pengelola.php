@@ -15,6 +15,7 @@ class Pengelola extends Model
     protected $fillable = [
         'user_id',
         'nama',
+        'email',
         'no_hp',
         'hunian_id',
     ];

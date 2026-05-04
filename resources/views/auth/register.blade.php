@@ -20,74 +20,55 @@
                     Buat akun mahasiswa
                 </h2>
 
-                <form method="POST" action="#" class="mt-6 space-y-5">
-                    @csrf
+<form method="POST" action="{{ route('register') }}" class="mt-6 space-y-5">
+    @csrf
 
+                    {{-- Nama Lengkap --}}
                     <div>
-                        <label class="text-sm font-medium">
-                            Nama Lengkap
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
+                        <label class="text-sm font-medium">Nama Lengkap</label>
+                        <input type="text" name="nama" value="{{ old('nama') }}" 
                             class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
-                            placeholder="Nama lengkap"
-                        >
+                            placeholder="Nama Lengkap" required>
+                        @error('nama') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
+                    {{-- NIM --}}
                     <div>
-                        <label class="text-sm font-medium">
-                            NIM
-                        </label>
-                        <input
-                            type="text"
-                            name="nim"
+                        <label class="text-sm font-medium">NIM</label>
+                        <input type="text" name="nim" value="{{ old('nim') }}" 
                             class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
-                            placeholder="Nomor Induk Mahasiswa"
-                        >
+                            placeholder="Nomor Induk Mahasiswa" required>
+                        @error('nim') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
+                    {{-- Email --}}
                     <div>
-                        <label class="text-sm font-medium">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
+                        <label class="text-sm font-medium">Email</label>
+                        <input type="email" name="email" value="{{ old('email') }}" 
                             class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
-                            placeholder="email@unsri.ac.id"
-                        >
+                            placeholder="email@student.unsri.ac.id" required>
+                        @error('email') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
+                    {{-- Password --}}
                     <div>
-                        <label class="text-sm font-medium">
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            name="password"
+                        <label class="text-sm font-medium">Password</label>
+                        <input type="password" name="password" 
                             class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
-                            placeholder="Minimal 8 karakter"
-                        >
+                            placeholder="Minimal 8 karakter" required>
+                        @error('password') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
+                    {{-- Konfirmasi Password --}}
                     <div>
-                        <label class="text-sm font-medium">
-                            Konfirmasi Password
-                        </label>
-                        <input
-                            type="password"
-                            name="password_confirmation"
+                        <label class="text-sm font-medium">Konfirmasi Password</label>
+                        <input type="password" name="password_confirmation" 
                             class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
-                            placeholder="Ulangi password"
-                        >
+                            placeholder="Ulangi password" required>
                     </div>
 
-                    <button
-                        type="submit"
-                        class="w-full rounded-xl bg-brand py-3 text-sm font-medium text-white shadow-sm hover:shadow-md"
-                    >
-                        Daftar
+                    <button type="submit" class="w-full rounded-xl bg-brand py-3 text-sm font-medium text-white shadow-sm hover:shadow-md">
+                        Daftar Akun
                     </button>
 
                     <p class="text-center text-sm text-content-sub">
