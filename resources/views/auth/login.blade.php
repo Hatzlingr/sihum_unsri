@@ -50,7 +50,7 @@
                             Ingat saya
                         </label>
 
-                        <a href="#" class="text-brand hover:underline">
+                        <a href="{{ route('password.request') }}" class="text-brand hover:underline">
                             Lupa password?
                         </a>
                     </div>

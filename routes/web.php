@@ -42,13 +42,24 @@ Route::post('/kontak', function () {
 */
 
 Route::middleware('guest')->group(function () {
+    // Login
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
+
+    // Register (Khusus Mahasiswa)
     Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('register', [RegisterController::class, 'register']);
+
+    // Forgot Password (Halaman Bantuan WA)
+    Route::get('forgot-password', function () {
+        return view('auth.forgot-password');
+    })->name('password.request');
 });
 
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+// Logout harus lewat middleware auth
+Route::post('logout', [LoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
 
 /*
