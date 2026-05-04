@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')
                   ->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('nama', 100);
+            $table->string('email', 100)->unique();
             $table->string('no_hp', 15)->nullable();
             $table->foreignId('hunian_id')->nullable()
                   ->constrained('hunian', 'id_hunian')

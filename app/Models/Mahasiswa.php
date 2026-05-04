@@ -16,6 +16,7 @@ class Mahasiswa extends Model
         'user_id',
         'nim',
         'nama',
+        'email',
         'prodi',
         'status_kipk',
         'no_hp',

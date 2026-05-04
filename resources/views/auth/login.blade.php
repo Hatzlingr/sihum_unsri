@@ -20,19 +20,15 @@
                     Masuk ke akun
                 </h2>
 
-                <form method="POST" action="#" class="mt-6 space-y-5">
+                <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-5">
                     @csrf
 
                     <div>
-                        <label class="text-sm font-medium">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
+                        <label class="text-sm font-medium">Username</label>
+                        <input type="text" name="username" 
+                            value="{{ old('username') }}"
                             class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
-                            placeholder="email@unsri.ac.id"
-                        >
+                            placeholder="Masukkan username Anda" required>
                     </div>
 
                     <div>
@@ -44,12 +40,13 @@
                             name="password"
                             class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
                             placeholder="Masukkan password"
+                            required
                         >
                     </div>
 
                     <div class="flex items-center justify-between text-sm">
                         <label class="flex items-center gap-2 text-content-sub">
-                            <input type="checkbox" class="rounded">
+                            <input type="checkbox" name="remember" class="rounded">
                             Ingat saya
                         </label>
 

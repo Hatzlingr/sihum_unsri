@@ -15,6 +15,7 @@ return new class extends Migration
             $table->enum('role', ['Admin', 'Mahasiswa', 'Pengelola']);
             $table->boolean('is_active')->default(true);
             $table->timestamp('last_login_at')->nullable();
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });
