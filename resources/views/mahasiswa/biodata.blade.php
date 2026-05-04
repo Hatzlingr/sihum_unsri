@@ -1,135 +1,131 @@
 <x-mahasiswa-layout title="Biodata Diri" page-title="Biodata" active="biodata">
     <div class="space-y-6">
 
-        {{-- Profil Singkat (Foto, Nama, Jurusan) --}}
+        {{-- Alert Sukses --}}
+        @if(session('success'))
+            <div class="rounded-2xl bg-green-50 border border-green-200 p-4 text-sm text-green-600 flex items-center gap-3">
+                <i class="bi bi-check-circle-fill text-lg"></i>
+                {{ session('success') }}
+            </div>
+        @endif
+
+        {{-- Header Profil --}}
         <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm relative">
-            {{-- Background Cover --}}
-            <div class="h-32 w-full bg-gradient-to-r from-brand to-brand-light/50"></div>
-            
+            <div class="h-32 w-full bg-linear-to-r from-brand to-brand-light/50"></div>
             <div class="px-5 sm:px-8 pb-8">
                 <div class="flex flex-col sm:flex-row gap-6 sm:items-end -mt-12 sm:-mt-16">
-                    {{-- Avatar --}}
-                    <div class="relative h-24 w-24 sm:h-32 sm:w-32 rounded-full border-4 border-bg-base bg-brand-soft flex items-center justify-center shrink-0 shadow-md">
+                    <div class="h-24 w-24 sm:h-32 sm:w-32 rounded-full border-4 border-bg-base bg-brand-soft flex items-center justify-center shrink-0 shadow-md">
                         <i class="bi bi-person-fill text-5xl text-brand"></i>
-                        {{-- Edit Photo Button --}}
-                        <button type="button" class="absolute bottom-0 right-0 rounded-full bg-brand p-2 text-white shadow-lg transition hover:bg-brand/90 hover:scale-105">
-                            <i class="bi bi-camera-fill text-sm"></i>
-                        </button>
                     </div>
-                    
-                    {{-- Info Singkat --}}
                     <div class="flex-1 pb-2">
-                        <h2 class="text-2xl font-bold text-content-main">{{ auth()->user()->name ?? 'Budi Santoso' }}</h2>
-                        <div class="mt-1 flex flex-col sm:flex-row gap-2 sm:gap-6 text-sm text-content-sub">
-                            <span class="flex items-center gap-1.5"><i class="bi bi-mortarboard"></i> Teknik Informatika</span>
-                            <span class="flex items-center gap-1.5"><i class="bi bi-person-badge"></i> 09021282126000</span>
+                        <div class="flex items-center gap-3">
+                            <h2 class="text-2xl font-bold text-content-main">{{ $mahasiswa->nama }}</h2>
+                            {{-- Hanya tampil jika KIP-K --}}
+                            @if($mahasiswa->status_kipk)
+                                <span class="rounded-full bg-green-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-green-600 border border-green-200">
+                                    <i class="bi bi-patch-check-fill"></i> KIP-K
+                                </span>
+                            @endif
                         </div>
+                        <p class="text-sm text-content-sub mt-1">
+                            <i class="bi bi-mortarboard"></i> {{ $mahasiswa->prodi }} | {{ $mahasiswa->nim }}
+                        </p>
+                    </div>
+                    <div class="pb-2">
+                        <button type="button" id="btn-edit" onclick="enableEditMode()" class="flex items-center gap-2 rounded-xl border border-brand text-brand px-5 py-2.5 text-sm font-semibold hover:bg-brand hover:text-white transition shadow-sm">
+                            <i class="bi bi-pencil-square"></i> Ubah Kontak
+                        </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        {{-- Data Diri Lengkap --}}
-        <section class="overflow-hidden rounded-xl border border-border-soft bg-white shadow-sm">
+        {{-- Detail Informasi --}}
+        <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
             <div class="p-6 sm:p-8">
-                <h2 class="text-xl font-semibold text-slate-800 mb-6">Data Diri</h2>
-                
-                <form action="#" method="POST" class="space-y-6">
-                    
-                    {{-- Nama --}}
-                    <div class="space-y-2">
-                        <label for="nama" class="text-sm font-semibold text-slate-800">Nama</label>
-                        <input type="text" id="nama" name="nama" value="{{ auth()->user()->name ?? 'Budi Santoso' }}" class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                    </div>
+                <form action="{{ route('mahasiswa.biodata.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
-                        {{-- NIK --}}
-                        <div class="space-y-2">
-                            <label for="nik" class="text-sm font-semibold text-slate-800">NIK</label>
-                            <input type="text" id="nik" name="nik" value="16710..." class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
+                    <div class="space-y-8">
+                        {{-- Identitas Akademik (ReadOnly) --}}
+                        <div>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                                <i class="bi bi-shield-lock"></i> Identitas Akademik
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-sm font-semibold text-content-main">Nama Lengkap</label>
+                                    <input type="text" value="{{ $mahasiswa->nama }}" disabled class="block w-full rounded-2xl border border-border-soft bg-bg-surface px-4 py-3 text-sm text-content-sub cursor-not-allowed">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-sm font-semibold text-content-main">NIM</label>
+                                    <input type="text" value="{{ $mahasiswa->nim }}" disabled class="block w-full rounded-2xl border border-border-soft bg-bg-surface px-4 py-3 text-sm text-content-sub cursor-not-allowed">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-sm font-semibold text-content-main">Program Studi</label>
+                                    <input type="text" value="{{ $mahasiswa->prodi }}" disabled class="block w-full rounded-2xl border border-border-soft bg-bg-surface px-4 py-3 text-sm text-content-sub cursor-not-allowed">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-sm font-semibold text-content-main">Status Beasiswa</label>
+                                    <input type="text" value="{{ $mahasiswa->status_kipk ? 'Penerima KIP-K' : 'Non-KIPK' }}" disabled class="block w-full rounded-2xl border border-border-soft bg-bg-surface px-4 py-3 text-sm text-content-sub cursor-not-allowed">
+                                </div>
+                            </div>
                         </div>
 
-                        {{-- NIM --}}
-                        <div class="space-y-2">
-                            <label for="nim" class="text-sm font-semibold text-slate-800">NIM</label>
-                            <input type="text" id="nim" name="nim" value="09021282126000" class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                        </div>
-
-                        {{-- Tempat Lahir --}}
-                        <div class="space-y-2">
-                            <label for="tempat_lahir" class="text-sm font-semibold text-slate-800">Tempat Lahir</label>
-                            <input type="text" id="tempat_lahir" name="tempat_lahir" value="Palembang" class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                        </div>
-
-                        {{-- Tanggal Lahir --}}
-                        <div class="space-y-2">
-                            <label for="tanggal_lahir" class="text-sm font-semibold text-slate-800">Tanggal Lahir</label>
-                            <input type="text" id="tanggal_lahir" name="tanggal_lahir" value="07-11-2006" class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                        </div>
-
-                        {{-- Agama --}}
-                        <div class="space-y-2">
-                            <label for="agama" class="text-sm font-semibold text-slate-800">Agama</label>
-                            <input type="text" id="agama" name="agama" value="Islam" class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                        </div>
-
-                        {{-- Kewarganegaraan --}}
-                        <div class="space-y-2">
-                            <label for="kewarganegaraan" class="text-sm font-semibold text-slate-800">Kewarganegaraan</label>
-                            <input type="text" id="kewarganegaraan" name="kewarganegaraan" value="Indonesia" class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                        </div>
-                    </div>
-
-                    {{-- Jenis Kelamin --}}
-                    <div class="space-y-3 pt-2">
-                        <label class="text-sm font-semibold text-slate-800">Jenis Kelamin</label>
-                        <div class="flex items-center gap-6">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="jenis_kelamin" value="Laki-Laki" checked class="h-4 w-4 border-slate-300 text-brand focus:ring-brand">
-                                <span class="text-sm text-slate-800">Laki-Laki</span>
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="jenis_kelamin" value="Perempuan" class="h-4 w-4 border-slate-300 text-brand focus:ring-brand">
-                                <span class="text-sm text-slate-800">Perempuan</span>
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="jenis_kelamin" value="Lainnya" class="h-4 w-4 border-slate-300 text-brand focus:ring-brand">
-                                <span class="text-sm text-slate-800">Lainnya</span>
-                            </label>
+                        {{-- Kontak Personal (Editable Mode) --}}
+                        <div class="pt-6 border-t border-dashed border-border-soft">
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-brand mb-4 flex items-center gap-2">
+                                <i class="bi bi-person-lines-fill"></i> Kontak Personal
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-sm font-semibold text-content-main">Email Utama</label>
+                                    <input type="text" value="{{ $mahasiswa->email }}" disabled class="block w-full rounded-2xl border border-border-soft bg-bg-surface px-4 py-3 text-sm text-content-sub cursor-not-allowed">
+                                    <p class="text-[10px] text-slate-400 mt-1">*Email digunakan untuk login sistem</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="input-wa" class="text-sm font-semibold text-content-main">Nomor WhatsApp</label>
+                                    <input type="text" id="input-wa" name="no_hp" value="{{ $mahasiswa->no_hp }}" disabled 
+                                        class="block w-full rounded-2xl border border-border-soft bg-bg-surface px-4 py-3 text-sm text-content-sub transition-all duration-300 cursor-not-allowed">
+                                    @error('no_hp')
+                                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    {{-- Kontak Mahasiswa Header --}}
-                    <div class="mt-8 mb-4 border-b border-slate-200 pb-3 flex items-center gap-2 pt-6">
-                        <i class="bi bi-person text-slate-800 text-xl"></i>
-                        <h3 class="text-lg font-semibold text-slate-800">Kontak Mahasiswa</h3>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
-                        {{-- Email --}}
-                        <div class="space-y-2">
-                            <label for="email" class="text-sm font-semibold text-slate-800">Email</label>
-                            <input type="email" id="email" name="email" value="{{ auth()->user()->email ?? 'mahasiswa@unsri.ac.id' }}" class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                        </div>
-
-                        {{-- No. HP --}}
-                        <div class="space-y-2">
-                            <label for="no_hp" class="text-sm font-semibold text-slate-800">No. HP</label>
-                            <input type="text" id="no_hp" name="no_hp" value="081234567890" class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand">
-                        </div>
-                    </div>
-
-                    {{-- Submit Action --}}
-                    <div class="flex justify-end pt-8">
-                        <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand/90 hover:-translate-y-0.5">
-                            <i class="bi bi-save"></i>
-                            Simpan Perubahan
+                    {{-- Action Buttons --}}
+                    <div id="action-buttons" class="hidden justify-end gap-3 pt-8 mt-8 border-t border-border-soft">
+                        <button type="button" onclick="window.location.reload()" class="rounded-2xl bg-slate-100 px-6 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-200 transition">
+                            Batal
+                        </button>
+                        <button type="submit" class="rounded-2xl bg-brand px-10 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-brand/90 hover:-translate-y-0.5 transition-all">
+                            <i class="bi bi-save2 me-1"></i> Simpan Perubahan
                         </button>
                     </div>
-
                 </form>
             </div>
         </section>
-
     </div>
+
+    {{-- Edit Mode Script --}}
+    <script>
+        function enableEditMode() {
+            const inputWa = document.getElementById('input-wa');
+            const btnEdit = document.getElementById('btn-edit');
+            const actionButtons = document.getElementById('action-buttons');
+
+            inputWa.disabled = false;
+            inputWa.classList.remove('bg-bg-surface', 'text-content-sub', 'cursor-not-allowed');
+            inputWa.classList.add('bg-bg-base', 'border-brand', 'ring-4', 'ring-brand/10', 'text-content-main', 'shadow-sm', 'cursor-text');
+            
+            inputWa.focus();
+
+            btnEdit.classList.add('hidden');
+            actionButtons.classList.remove('hidden');
+            actionButtons.classList.add('flex');
+        }
+    </script>
 </x-mahasiswa-layout>
