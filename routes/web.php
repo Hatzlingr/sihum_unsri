@@ -87,6 +87,13 @@ Route::middleware(['auth'])->group(function () {
     // Middleware 'mahasiswa'
     Route::middleware(['mahasiswa'])->prefix('mahasiswa')->group(function () {
         Route::get('/dashboard', fn() => view('mahasiswa.dashboard'))->name('mahasiswa.dashboard');
+        Route::get('/hunian', fn() => view('mahasiswa.hunian'))->name('mahasiswa.hunian');
+        Route::get('/pengajuan', fn() => view('mahasiswa.pengajuan'))->name('mahasiswa.pengajuan');
+        Route::get('/pembayaran', fn() => view('mahasiswa.pembayaran'))->name('mahasiswa.pembayaran');
+        Route::get('/pindah-kamar', fn() => view('mahasiswa.pindah-kamar'))->name('mahasiswa.pindah-kamar');
+        Route::get('/pemberhentian', fn() => view('mahasiswa.pemberhentian'))->name('mahasiswa.pemberhentian');
+        Route::get('/biodata', fn() => view('mahasiswa.biodata'))->name('mahasiswa.biodata');
+        Route::get('/pengaturan', fn() => view('mahasiswa.pengaturan'))->name('mahasiswa.pengaturan');
     });
 
 });
