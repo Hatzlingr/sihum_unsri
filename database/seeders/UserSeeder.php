@@ -2,37 +2,96 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
+    /**
+     * Seed tabel users.
+     * Role: Admin | Mahasiswa | Pengelola
+     */
     public function run(): void
     {
         $users = [
             [
-                'username' => 'admin_sihum',
-                'password' => 'password123',
-                'role' => 'Admin',
-                'is_active' => true,
+                'username'      => 'admin_sihum',
+                'password'      => 'password123',
+                'role'          => 'Admin',
+                'is_active'     => 1,
+                'last_login_at' => null,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+                'deleted_at'    => null,
             ],
             [
-                'username' => 'pengelola_asrama',
-                'password' => 'password123',
-                'role' => 'Pengelola',
-                'is_active' => true,
+                'username'      => 'pengelola_asrama',
+                'password'      => 'password123',
+                'role'          => 'Pengelola',
+                'is_active'     => 1,
+                'last_login_at' => null,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+                'deleted_at'    => null,
             ],
             [
-                'username' => 'mahasiswa_unsri',
-                'password' => 'password123',
-                'role' => 'Mahasiswa',
-                'is_active' => true,
+                'username'      => 'mahasiswa_unsri',
+                'password'      => 'password123',
+                'role'          => 'Mahasiswa',
+                'is_active'     => 1,
+                'last_login_at' => null,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+                'deleted_at'    => null,
+            ],
+            [
+                'username'      => 'mhs_001',
+                'password'      => 'mahasiswa123',
+                'role'          => 'Mahasiswa',
+                'is_active'     => 1,
+                'last_login_at' => null,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+                'deleted_at'    => null,
+            ],
+            [
+                'username'      => 'mhs_002',
+                'password'      => 'mahasiswa123',
+                'role'          => 'Mahasiswa',
+                'is_active'     => 1,
+                'last_login_at' => null,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+                'deleted_at'    => null,
+            ],
+            [
+                'username'      => 'mhs_003',
+                'password'      => 'mahasiswa123',
+                'role'          => 'Mahasiswa',
+                'is_active'     => 1,
+                'last_login_at' => null,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+                'deleted_at'    => null,
             ],
         ];
 
-        foreach ($users as $user) {
-            User::create($user);
+        // Tambahkan 20 mahasiswa tambahan
+        for ($i = 4; $i <= 23; $i++) {
+            $users[] = [
+                'username'      => 'mhs_' . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'password'      => 'mahasiswa123',
+                'role'          => 'Mahasiswa',
+                'is_active'     => 1,
+                'last_login_at' => null,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+                'deleted_at'    => null,
+            ];
         }
+
+        DB::table('users')->insert($users);
     }
 }
