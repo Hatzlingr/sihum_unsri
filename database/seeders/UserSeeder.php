@@ -13,19 +13,19 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'username' => 'admin_sihum',
-                'password' => Hash::make('password123'),
+                'password' => 'password123',
                 'role' => 'Admin',
                 'is_active' => true,
             ],
             [
                 'username' => 'pengelola_asrama',
-                'password' => Hash::make('password123'),
+                'password' => 'password123',
                 'role' => 'Pengelola',
                 'is_active' => true,
             ],
             [
                 'username' => 'mahasiswa_unsri',
-                'password' => Hash::make('password123'),
+                'password' => 'password123',
                 'role' => 'Mahasiswa',
                 'is_active' => true,
             ],

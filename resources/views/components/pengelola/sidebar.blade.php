@@ -66,11 +66,11 @@
     </nav>
 
     <div class="border-t border-border-soft p-4">
-        <form method="POST" action="{{ $logoutAction }}">
+        <form action="{{ route('logout') }}" method="POST" class="w-full">
             @csrf
-            <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-border-soft px-4 py-2.5 text-sm font-semibold text-content-main transition hover:border-brand hover:bg-brand-light hover:text-brand">
-                <i class="bi bi-box-arrow-right"></i>
-                Logout
+            <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-600 transition-all hover:bg-red-50">
+                <i class="bi bi-box-arrow-right text-lg"></i>
+                <span>Keluar Sistem</span>
             </button>
         </form>
     </div>
