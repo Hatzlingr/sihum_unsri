@@ -73,6 +73,10 @@ Route::middleware(['auth'])->group(function () {
     // Middleware 'admin' yang sudah kamu buat tadi
     Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
+        // Tambahkan route admin lainnya di sini, misalnya:
+        Route::get('/mahasiswa', fn() => view('admin.mahasiswa.index'))->name('admin.mahasiswa.index');
+        Route::get('/hunian', fn() => view('admin.hunian.index'))->name('admin.hunian.index');
+        Route::get('/pembayaran', fn() => view('admin.pembayaran.index'))->name('admin.pembayaran.index');
     });
 
     // Middleware 'pengelola'
