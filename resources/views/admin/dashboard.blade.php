@@ -69,7 +69,7 @@
                         <span class="text-xl font-bold text-content-main">{{ $total }}</span>
                     </div>
                 @empty
-                    <x-admin.skeleton-list :rows="5" height="h-9" />
+                    <x-admin.skeleton-list :rows="6" height="h-9" />
                 @endforelse
             </x-admin.panel>
 
