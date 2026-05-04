@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,8 +74,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Middleware 'admin' yang sudah kamu buat tadi
     Route::middleware(['admin'])->prefix('admin')->group(function () {
-        Route::get('/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
-        // Tambahkan route admin lainnya di sini, misalnya:
+        Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('admin.dashboard');
         Route::get('/mahasiswa', fn() => view('admin.mahasiswa.index'))->name('admin.mahasiswa.index');
         Route::get('/hunian', fn() => view('admin.hunian.index'))->name('admin.hunian.index');
         Route::get('/pembayaran', fn() => view('admin.pembayaran.index'))->name('admin.pembayaran.index');
@@ -86,7 +87,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Middleware 'mahasiswa'
     Route::middleware(['mahasiswa'])->prefix('mahasiswa')->group(function () {
-        Route::get('/dashboard', fn() => view('mahasiswa.dashboard'))->name('mahasiswa.dashboard');
+        Route::get('/dashboard', [MahasiswaDashboard::class, 'index'])->name('mahasiswa.dashboard');
         Route::get('/hunian', fn() => view('mahasiswa.hunian'))->name('mahasiswa.hunian');
         Route::get('/pengajuan', fn() => view('mahasiswa.pengajuan'))->name('mahasiswa.pengajuan');
         Route::get('/pembayaran', fn() => view('mahasiswa.pembayaran'))->name('mahasiswa.pembayaran');

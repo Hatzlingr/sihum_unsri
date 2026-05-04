@@ -48,14 +48,20 @@ class LoginController extends Controller
 
     protected function redirectBasedOnRole($user)
     {
+        // Cek role dengan helper yang sudah kamu buat di model User
         if ($user->isAdmin()) {
-            return redirect()->intended('/admin/dashboard');
-        } elseif ($user->isPengelola()) {
-            return redirect()->intended('/pengelola/dashboard');
-        } elseif ($user->isMahasiswa()) {
-            return redirect()->intended('/mahasiswa/dashboard');
+            return redirect('/admin/dashboard');
         }
 
+        if ($user->isPengelola()) {
+            return redirect('/pengelola/dashboard');
+        }
+
+        if ($user->isMahasiswa()) {
+            return redirect('/mahasiswa/dashboard');
+        }
+
+        // Jika tidak ada role yang cocok, lempar ke beranda
         return redirect('/');
     }
 
@@ -64,6 +70,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect()->route('login');
     }
 }
