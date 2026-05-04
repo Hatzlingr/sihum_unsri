@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'username'      => 'admin_sihum',
-                'password'      => Hash::make('admin123'),
+                'password'      => Hash::make('password123'),
                 'role'          => 'Admin',
                 'is_active'     => 1,
                 'last_login_at' => null,
@@ -28,8 +28,18 @@ class UserSeeder extends Seeder
             ],
             [
                 'username'      => 'pengelola_asrama',
-                'password'      => Hash::make('pengelola123'),
+                'password'      => Hash::make('password123'),
                 'role'          => 'Pengelola',
+                'is_active'     => 1,
+                'last_login_at' => null,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+                'deleted_at'    => null,
+            ],
+            [
+                'username'      => 'mahasiswa_unsri',
+                'password'      => Hash::make('password123'),
+                'role'          => 'Mahasiswa',
                 'is_active'     => 1,
                 'last_login_at' => null,
                 'created_at'    => now(),

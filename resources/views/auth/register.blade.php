@@ -6,6 +6,12 @@
         <div class="mx-auto w-full items-center justify-center">
             <div class="mx-auto w-full max-w-md rounded-3xl bg-bg-base p-8 shadow-xl shadow-slate-200/70">
 
+                {{-- Tombol Kembali --}}
+                <a href="{{ url('/') }}" class="mb-6 inline-flex items-center gap-2 text-sm font-medium text-content-sub transition-colors hover:text-brand">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali
+                </a>
+
                 {{-- Logo --}}
                 <div class="mb-6 flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-white">
