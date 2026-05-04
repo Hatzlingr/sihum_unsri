@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Pengelola')
-@section('heading', 'Role Pengelola - Dashboard')
-@section('subheading', 'Halaman utama untuk role Pengelola (Rama).')
+@section('title', 'Dashboard Pemilik Kos')
+@section('heading', 'Role Pemilik Kos - Dashboard')
+@section('subheading', 'Halaman utama untuk role Pemilik Kos (Rama).')
 
 @section('content')
     <section class="placeholder-card">

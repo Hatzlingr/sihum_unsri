@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Pengelola - Hunian')
-@section('heading', 'Pengelola - Data Hunian')
+@section('title', 'Pemilik Kos - Hunian')
+@section('heading', 'Pemilik Kos - Data Hunian')
 @section('subheading', 'Informasi properti hunian yang dikelola.')
 
 @section('content')

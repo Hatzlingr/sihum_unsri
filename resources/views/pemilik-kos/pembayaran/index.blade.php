@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Pengelola - Pembayaran')
-@section('heading', 'Pengelola - Rekap Pembayaran')
+@section('title', 'Pemilik Kos - Pembayaran')
+@section('heading', 'Pemilik Kos - Rekap Pembayaran')
 @section('subheading', 'Rekap status pembayaran hunian.')
 
 @section('content')
