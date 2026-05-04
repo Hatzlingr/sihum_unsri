@@ -1,161 +1,171 @@
 <x-mahasiswa-layout title="Pembayaran" page-title="Pembayaran" active="pembayaran">
     <div class="space-y-6">
 
-        {{-- Cara Pembayaran --}}
-        <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
-            <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
-                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
-                    <i class="bi bi-info-circle"></i>
-                </span>
-                <h2 class="text-base font-semibold text-content-main sm:text-lg">Cara Pembayaran</h2>
+        {{-- Flash Message --}}
+        @if(session('success'))
+            <div class="flex items-center gap-3 p-4 text-sm text-green-600 rounded-2xl bg-green-50 border border-green-200 animate-in fade-in slide-in-from-top-4 duration-300">
+                <i class="bi bi-check-circle-fill"></i>
+                <span class="font-semibold">{{ session('success') }}</span>
             </div>
-            <div class="p-5 sm:p-6 space-y-4">
-                <p class="text-sm text-content-sub">Silakan lakukan pembayaran ke salah satu rekening Bank Sumsel Babel berikut ini:</p>
+        @endif
+
+        {{-- Grid Utama --}}
+        <div class="grid gap-6 lg:grid-cols-3">
+            
+            {{-- KOLOM KIRI: Info & Riwayat (2/3) --}}
+            <div class="lg:col-span-2 space-y-6">
                 
-                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    <div class="rounded-2xl border border-border-soft bg-bg-surface p-4">
-                        <div class="text-xs font-semibold uppercase tracking-wider text-content-sub mb-1">Bank Sumsel Babel (BSB)</div>
-                        <div class="text-lg font-bold text-content-main mb-1">123-456-7890</div>
-                        <div class="text-sm font-medium text-brand">a.n. BPU UNSRI</div>
+                {{-- Card Tagihan Aktif --}}
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <article class="rounded-3xl border border-border-soft bg-bg-base p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+                                <i class="bi bi-wallet2 text-xl"></i>
+                            </span>
+                            @if($tagihanAktif)
+                                <span class="px-3 py-1 rounded-full bg-brand/10 text-brand text-[10px] font-bold uppercase tracking-wider">
+                                    {{ $tagihanAktif->jenis_pembayaran }}
+                                </span>
+                            @endif
+                        </div>
+                        <p class="text-sm font-medium text-content-sub">Tagihan Saat Ini</p>
+                        <h3 class="text-2xl font-bold text-content-main mt-1">
+                            Rp {{ $tagihanAktif ? number_format($tagihanAktif->jumlah_bayar, 0, ',', '.') : '0' }}
+                        </h3>
+                        @if($tagihanAktif)
+                            <p class="mt-4 text-xs text-content-sub flex items-center gap-2">
+                                <i class="bi bi-calendar3"></i>
+                                {{ $tagihanAktif->periode_mulai->translatedFormat('d M') }} - {{ $tagihanAktif->periode_selesai->translatedFormat('d M Y') }}
+                            </p>
+                        @endif
+                    </article>
+
+                    <article class="rounded-3xl border border-border-soft bg-bg-base p-6 shadow-sm">
+                        <p class="text-sm font-medium text-content-sub mb-4">Status Verifikasi</p>
+                        @if($tagihanAktif)
+                            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl font-bold text-sm
+                                {{ $tagihanAktif->status_verifikasi == 'Menunggu' ? 'bg-amber-50 text-amber-600 border border-amber-200' : 
+                                   ($tagihanAktif->status_verifikasi == 'Ditolak' ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-gray-50 text-content-sub border border-border-soft') }}">
+                                <span class="relative flex h-2 w-2">
+                                    @if($tagihanAktif->status_verifikasi == 'Menunggu')
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                    @endif
+                                    <span class="relative inline-flex rounded-full h-2 w-2 {{ $tagihanAktif->status_verifikasi == 'Menunggu' ? 'bg-amber-500' : ($tagihanAktif->status_verifikasi == 'Ditolak' ? 'bg-red-500' : 'bg-gray-400') }}"></span>
+                                </span>
+                                {{ $tagihanAktif->status_verifikasi }}
+                            </div>
+                            @if($tagihanAktif->catatan_admin)
+                                <p class="mt-3 text-xs text-red-500 italic leading-relaxed">
+                                    *{{ $tagihanAktif->catatan_admin }}
+                                </p>
+                            @endif
+                        @else
+                            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-green-50 text-green-600 border border-green-200 font-bold text-sm">
+                                <i class="bi bi-shield-check"></i> Semua Lunas
+                            </div>
+                        @endif
+                    </article>
+                </div>
+
+                {{-- Tabel Riwayat --}}
+                <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
+                    <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand text-sm">
+                            <i class="bi bi-clock-history"></i>
+                        </span>
+                        <h2 class="font-bold text-content-main">Riwayat Pembayaran</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-bg-surface text-[11px] uppercase tracking-wider text-content-sub font-bold">
+                                    <th class="px-6 py-4">Periode</th>
+                                    <th class="px-6 py-4">Tanggal Bayar</th>
+                                    <th class="px-6 py-4">Nominal</th>
+                                    <th class="px-6 py-4 text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border-soft">
+                                @forelse($riwayat as $item)
+                                <tr class="group text-sm hover:bg-bg-surface transition-colors">
+                                    <td class="px-6 py-4 font-semibold text-content-main">{{ $item->periode_mulai->translatedFormat('F Y') }}</td>
+                                    <td class="px-6 py-4 text-content-sub">{{ $item->tgl_bayar?->translatedFormat('d M Y') ?? '-' }}</td>
+                                    <td class="px-6 py-4 font-bold text-content-main">Rp {{ number_format($item->jumlah_bayar, 0, ',', '.') }}</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="inline-flex px-2 py-1 rounded-lg bg-green-100 text-green-700 text-[10px] font-bold">LUNAS</span>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-12 text-center">
+                                        <p class="text-sm text-content-sub italic">Belum ada catatan riwayat pembayaran.</p>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            {{-- KOLOM KANAN: Upload (1/3) --}}
+            <div class="lg:col-span-1">
+                <section class="sticky top-6 rounded-3xl border border-border-soft bg-bg-base shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-border-soft bg-bg-surface">
+                        <h2 class="font-bold text-content-main">Konfirmasi Bayar</h2>
+                        <p class="text-xs text-content-sub mt-1 text-pretty">Kirimkan bukti transfer untuk divalidasi admin.</p>
                     </div>
                     
-                    <div class="rounded-2xl border border-border-soft bg-bg-surface p-4">
-                        <div class="text-xs font-semibold uppercase tracking-wider text-content-sub mb-1">Bank Mandiri</div>
-                        <div class="text-lg font-bold text-content-main mb-1">098-765-4321</div>
-                        <div class="text-sm font-medium text-brand">a.n. BPU UNSRI</div>
-                    </div>
-                </div>
-
-                <div class="mt-4 rounded-2xl bg-blue-50 p-4 border border-blue-100">
-                    <div class="flex gap-3">
-                        <i class="bi bi-exclamation-triangle text-blue-600 mt-0.5"></i>
-                        <p class="text-sm text-blue-800">
-                            <strong>Penting:</strong> Pastikan Anda membayar sesuai dengan <strong>Total Pembayaran</strong> yang tertera. Simpan bukti transfer dan unggah pada form yang tersedia. Verifikasi pembayaran membutuhkan waktu 1x24 jam kerja.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {{-- Grid Tengah: Info Pembayaran & Unggah Bukti --}}
-        <div class="grid gap-6 lg:grid-cols-2">
-            
-            {{-- Kolom Kiri: Total & Status --}}
-            <div class="flex flex-col gap-6">
-                {{-- Total Pembayaran --}}
-                <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm flex-1">
-                    <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
-                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
-                            <i class="bi bi-wallet2"></i>
-                        </span>
-                        <h2 class="text-base font-semibold text-content-main sm:text-lg">Total Pembayaran</h2>
-                    </div>
-                    <div class="p-5 sm:p-6 flex flex-col items-center justify-center min-h-[140px]">
-                        <p class="text-sm text-content-sub mb-2">Tagihan Bulan September 2026</p>
-                        <div class="text-3xl font-bold tracking-tight text-content-main">Rp 350.000</div>
-                    </div>
-                </section>
-
-                {{-- Status Pembayaran Bulan Ini --}}
-                <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm flex-1">
-                    <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
-                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
-                            <i class="bi bi-receipt"></i>
-                        </span>
-                        <h2 class="text-base font-semibold text-content-main sm:text-lg">Status Pembayaran Bulan Ini</h2>
-                    </div>
-                    <div class="p-5 sm:p-6 flex flex-col items-center justify-center min-h-[140px]">
-                        <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-4 py-1.5 text-sm font-bold text-yellow-700 mb-3">
-                            <i class="bi bi-hourglass-split"></i> Menunggu Pembayaran
-                        </span>
-                        <p class="text-sm text-content-sub text-center">Silakan unggah bukti pembayaran Anda.</p>
-                    </div>
-                </section>
-            </div>
-
-            {{-- Kolom Kanan: Unggah Bukti Pembayaran --}}
-            <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm flex flex-col">
-                <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
-                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
-                        <i class="bi bi-cloud-arrow-up"></i>
-                    </span>
-                    <h2 class="text-base font-semibold text-content-main sm:text-lg">Unggah Bukti Pembayaran</h2>
-                </div>
-                <div class="p-5 sm:p-6 flex-1 flex flex-col">
-                    <form action="#" method="POST" class="flex-1 flex flex-col space-y-4">
-                        
-                        <div class="flex-1 flex flex-col justify-center rounded-3xl border-2 border-dashed border-border-soft bg-bg-surface px-6 py-10 transition-colors hover:border-brand/50 hover:bg-brand-light/30">
-                            <div class="text-center">
-                                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand-soft text-brand mb-4">
-                                    <i class="bi bi-file-earmark-image text-2xl"></i>
-                                </div>
-                                <div class="mt-4 flex text-sm leading-6 text-content-main justify-center">
-                                    <label for="bukti-pembayaran" class="relative cursor-pointer rounded-md bg-transparent font-semibold text-brand focus-within:outline-none focus-within:ring-2 focus-within:ring-brand focus-within:ring-offset-2 hover:text-brand/80">
-                                        <span>Pilih file bukti transfer</span>
-                                        <input id="bukti-pembayaran" name="bukti-pembayaran" type="file" class="sr-only" accept="image/png, image/jpeg, application/pdf">
+                    <div class="p-6">
+                        @if($tagihanAktif && $tagihanAktif->status_verifikasi != 'Menunggu')
+                            <form action="{{ route('mahasiswa.pembayaran.upload', $tagihanAktif->id_bayar) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                                @csrf
+                                @method('PATCH')
+                                
+                                <div class="relative group">
+                                    <label class="flex flex-col items-center justify-center w-full h-56 border-2 border-dashed border-border-soft rounded-3xl bg-bg-surface cursor-pointer group-hover:border-brand/40 group-hover:bg-brand/5 transition-all">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <div class="p-4 rounded-2xl bg-white shadow-sm mb-4 group-hover:scale-110 transition-transform">
+                                                <i class="bi bi-cloud-arrow-up text-3xl text-brand"></i>
+                                            </div>
+                                            <p class="text-sm font-bold text-content-main">Pilih File Bukti</p>
+                                            <p class="text-[11px] text-content-sub mt-1">PNG, JPG, JPEG (Maks. 2MB)</p>
+                                        </div>
+                                        <input id="bukti_transfer" name="bukti_transfer" type="file" class="hidden" required />
                                     </label>
                                 </div>
-                                <p class="text-xs leading-5 text-content-sub mt-2">Format: JPG, PNG, atau PDF (Maks. 2MB)</p>
+
+                                <button type="submit" class="w-full inline-flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-brand/20 active:scale-[0.98]">
+                                    <i class="bi bi-send-check"></i>
+                                    Kirim Bukti
+                                </button>
+                            </form>
+                        @else
+                            <div class="text-center py-12 px-4 rounded-3xl bg-bg-surface border border-border-soft border-dashed">
+                                <div class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-4">
+                                    <i class="bi bi-shield-lock text-2xl text-content-sub"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-content-main uppercase tracking-tight">Form Terkunci</h4>
+                                <p class="text-[11px] text-content-sub mt-2 leading-relaxed">
+                                    {{ $tagihanAktif && $tagihanAktif->status_verifikasi == 'Menunggu' 
+                                        ? 'Sabar ya, bukti transfer kamu sedang dicek sama admin.' 
+                                        : 'Kamu belum punya tagihan baru yang perlu dibayar.' }}
+                                </p>
                             </div>
-                        </div>
+                        @endif
 
-                        <div class="flex justify-end pt-2">
-                            <button type="submit" class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-brand px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand/90 hover:-translate-y-0.5">
-                                <i class="bi bi-send-check"></i>
-                                Kirim Bukti
-                            </button>
+                        <div class="mt-6 p-4 rounded-2xl bg-blue-50 border border-blue-100 space-y-2">
+                            <h4 class="text-[10px] font-bold text-blue-700 uppercase tracking-widest flex items-center gap-2">
+                                <i class="bi bi-info-circle-fill"></i> Instruksi
+                            </h4>
+                            <p class="text-[11px] text-blue-600 leading-relaxed">
+                                Mohon gunakan nominal yang tepat hingga digit terakhir agar proses verifikasi lebih cepat.
+                            </p>
                         </div>
-                    </form>
-                </div>
-            </section>
+                    </div>
+                </section>
+            </div>
+
         </div>
-
-        {{-- Riwayat Pembayaran --}}
-        <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
-            <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
-                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
-                    <i class="bi bi-clock-history"></i>
-                </span>
-                <h2 class="text-base font-semibold text-content-main sm:text-lg">Riwayat Pembayaran</h2>
-            </div>
-            
-            <div class="p-5 sm:p-6">
-                <div class="overflow-x-auto rounded-2xl border border-border-soft">
-                    <table class="min-w-full text-left text-sm whitespace-nowrap">
-                        <thead class="bg-bg-surface text-xs uppercase tracking-wide text-content-sub">
-                            <tr>
-                                <th class="px-5 py-4 font-semibold">Bulan/Periode</th>
-                                <th class="px-5 py-4 font-semibold">Tanggal Bayar</th>
-                                <th class="px-5 py-4 font-semibold">Nominal</th>
-                                <th class="px-5 py-4 font-semibold">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border-soft">
-                            <tr class="hover:bg-bg-surface/50 transition-colors">
-                                <td class="px-5 py-4 font-medium text-content-main">Agustus 2026</td>
-                                <td class="px-5 py-4 text-content-sub">02 Agustus 2026</td>
-                                <td class="px-5 py-4 font-medium text-content-main">Rp 350.000</td>
-                                <td class="px-5 py-4">
-                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">
-                                        Lunas
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-bg-surface/50 transition-colors">
-                                <td class="px-5 py-4 font-medium text-content-main">Juli 2026</td>
-                                <td class="px-5 py-4 text-content-sub">05 Juli 2026</td>
-                                <td class="px-5 py-4 font-medium text-content-main">Rp 350.000</td>
-                                <td class="px-5 py-4">
-                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">
-                                        Lunas
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
     </div>
 </x-mahasiswa-layout>

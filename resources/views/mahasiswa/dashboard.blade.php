@@ -7,14 +7,14 @@
                 <p class="text-sm font-medium">{{ session('error') }}</p>
             </div>
         @endif
-        
+
         {{-- Welcome Banner --}}
         <section class="overflow-hidden rounded-3xl bg-brand p-6 sm:p-8">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p class="text-sm font-semibold text-white/70">Selamat datang kembali,</p>
                     <h2 class="mt-1 text-2xl font-bold text-white sm:text-3xl">
-                        {{ auth()->user()->name ?? 'Mahasiswa' }} 👋
+                        {{ $mahasiswa->nama ?? 'Mahasiswa' }}
                     </h2>
                     <p class="mt-1 text-sm text-white/70">Pantau status hunian dan pembayaran kamu di sini.</p>
                 </div>
@@ -48,8 +48,9 @@
                 class="rounded-3xl border border-border-soft bg-bg-base p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md">
                 <div class="flex items-start justify-between gap-4">
                     <div class="min-w-0">
+                        {{-- Card Pembayaran --}}
                         <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">
-                            {{ $pembayaranTerakhir->status ?? 'Belum Ada' }}
+                            {{ $pembayaranTerakhir?->status_verifikasi ?? 'Belum Ada' }}
                         </p>
                     </div>
                     <span
@@ -85,7 +86,7 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="min-w-0">
                         <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">
-                            {{ $penempatan->kamar->nomor_kamar ?? '--' }}
+                            {{ $penempatan?->kamar?->nomor_kamar ?? '--' }}
                         </p>
                     </div>
                     <span
@@ -102,52 +103,56 @@
         {{-- Grid 2 Kolom: Info Hunian & Aksi Cepat --}}
         <section class="grid gap-6 xl:grid-cols-2">
             {{-- Info Hunian --}}
-            <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
-                <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
-                    <span
-                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
-                        <i class="bi bi-house-door"></i>
-                    </span>
-                    <h2 class="text-base font-semibold text-content-main sm:text-lg">Informasi Hunian</h2>
-                </div>
-                <div class="p-5 sm:p-6 space-y-4">
-                    <div
-                        class="flex items-center justify-between rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
-                        <div class="flex items-center gap-3">
-                            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                                <i class="bi bi-buildings"></i>
-                            </span>
-                            <span class="text-sm font-semibold text-content-sub">
-                                {{ $penempatan->kamar->hunian->nama_hunian ?? 'Belum Menghuni' }}
+            <div class="p-5 sm:p-6 space-y-4">
+                {{-- Nama Gedung/Hunian --}}
+                <div
+                    class="flex items-center justify-between rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                            <i class="bi bi-buildings"></i>
+                        </span>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-content-sub">Nama Hunian</span>
+                            <span class="text-sm font-semibold text-content-main">
+                                {{ $penempatan?->kamar?->hunian?->nama_hunian ?? 'Belum ada data' }}
                             </span>
                         </div>
-                        <span class="text-sm font-semibold text-content-sub">-- </span>
-                    </div>
-                    <div
-                        class="flex items-center justify-between rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
-                        <div class="flex items-center gap-3">
-                            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                                <i class="bi bi-geo-alt"></i>
-                            </span>
-                            <span class="text-sm font-semibold text-content-sub">
-                                {{ $penempatan->kamar->hunian->alamat ?? '--' }}
-                            </span>
-                        </div>
-                        <span class="text-sm font-semibold text-content-sub">--</span>
-                    </div>
-                    <div
-                        class="flex items-center justify-between rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
-                        <div class="flex items-center gap-3">
-                            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                                <i class="bi bi-door-open"></i>
-                            </span>
-                           <span class="text-sm font-semibold text-content-sub">
-                                {{ $penempatan->kamar->hunian->alamat ?? '--' }}
-                            </span>
-                        <span class="text-sm font-semibold text-content-sub">--</span>
                     </div>
                 </div>
-            </section>
+
+                {{-- Lokasi (Sebelumnya kita tulis alamat, sekarang ganti lokasi) --}}
+                <div
+                    class="flex items-center justify-between rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                            <i class="bi bi-geo-alt"></i>
+                        </span>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-content-sub">Lokasi</span>
+                            <span class="text-sm font-semibold text-content-main">
+                                {{ $penempatan?->kamar?->hunian?->lokasi ?? '--' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Nomor Kamar & Lantai --}}
+                <div
+                    class="flex items-center justify-between rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                            <i class="bi bi-door-open"></i>
+                        </span>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-content-sub">Nomor Kamar</span>
+                            <span class="text-sm font-semibold text-content-main">
+                                Kamar {{ $penempatan?->kamar?->nomor_kamar ?? '--' }} (Lantai
+                                {{ $penempatan?->kamar?->lantai ?? '-' }})
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {{-- Aksi Cepat --}}
             <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
