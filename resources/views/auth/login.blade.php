@@ -1,17 +1,9 @@
-{{-- resources/views/auth/login.blade.php --}}
 <x-auth-layout>
     <x-slot:title>Masuk | SIHUM UNSRI</x-slot:title>
 
     <section class="flex min-h-screen items-center px-4 py-12">
         <div class="mx-auto w-full items-center justify-center gap-10">
-
-            {{-- Tombol Back --}}
-            <div class="mx-auto mb-4 w-full max-w-md">
-                <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-sm font-medium text-content-sub transition hover:text-brand">
-                    <i class="bi bi-arrow-left"></i>
-                    Kembali ke Beranda
-                </a>
-            </div>
+            {{-- Form --}}
             <div class="mx-auto w-full max-w-md rounded-3xl bg-bg-base p-8 shadow-xl shadow-slate-200/70">
 
                 {{-- Logo --}}
@@ -28,64 +20,42 @@
                     Masuk ke akun
                 </h2>
 
-                {{-- Alert Success --}}
-                @if (session('success'))
-                    <div class="mt-4 rounded-xl bg-green-50 p-4 text-sm text-green-800">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                {{-- Alert Error --}}
-                @if ($errors->any())
-                    <div class="mt-4 rounded-xl bg-red-50 p-4">
-                        <ul class="list-inside list-disc text-sm text-red-800">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-5">
+                <form method="POST" action="#" class="mt-6 space-y-5">
                     @csrf
 
                     <div>
                         <label class="text-sm font-medium">
-                            Username
+                            Email
                         </label>
                         <input
-                            type="text"
-                            name="username"
-                            value="{{ old('username') }}"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('username') ring-2 ring-red-500 @enderror"
-                            placeholder="username"
-                            required
-                            autofocus
+                            type="email"
+                            name="email"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
+                            placeholder="email@unsri.ac.id"
                         >
-                        @error('nim')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div>
-                        <label class="text-sm font-medium">Password</label>
+                        <label class="text-sm font-medium">
+                            Password
+                        </label>
                         <input
                             type="password"
                             name="password"
-                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand @error('password') ring-2 ring-red-500 @enderror"
+                            class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand"
                             placeholder="Masukkan password"
-                            required
                         >
-                        @error('password')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="flex items-center justify-between text-sm">
                         <label class="flex items-center gap-2 text-content-sub">
-                            <input type="checkbox" name="remember" class="rounded">
+                            <input type="checkbox" class="rounded">
                             Ingat saya
                         </label>
+
+                        <a href="#" class="text-brand hover:underline">
+                            Lupa password?
+                        </a>
                     </div>
 
                     <button
