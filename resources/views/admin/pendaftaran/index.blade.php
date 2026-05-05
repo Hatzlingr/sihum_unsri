@@ -2,14 +2,11 @@
     $pendaftaranSource = $pendaftaran ?? $pengajuan ?? collect();
     $pendaftaranItems = method_exists($pendaftaranSource, 'items') ? collect($pendaftaranSource->items()) : collect($pendaftaranSource);
     $activeStatus = request('status', 'Pending');
-    $filteredItems = $pendaftaranItems->isNotEmpty()
-        ? $pendaftaranItems->filter(fn ($item) => request()->filled('status') ? data_get($item, 'status_seleksi') === $activeStatus : true)
-        : collect();
 
     $counts = $counts ?? [
-        'Pending' => $pendingCount ?? $pendaftaranItems->where('status_seleksi', 'Pending')->count(),
-        'Disetujui' => $approvedCount ?? $pendaftaranItems->where('status_seleksi', 'Disetujui')->count(),
-        'Ditolak' => $rejectedCount ?? $pendaftaranItems->where('status_seleksi', 'Ditolak')->count(),
+        'Pending' => $pendingCount ?? 0,
+        'Disetujui' => $approvedCount ?? 0,
+        'Ditolak' => $rejectedCount ?? 0,
     ];
 
     $statusCards = [
@@ -88,7 +85,7 @@
                 </div>
 
                 <div class="p-4 sm:p-5">
-                    @forelse (($filteredItems->isNotEmpty() ? $filteredItems : $pendaftaranItems) as $item)
+                    @forelse ($pendaftaranItems as $item)
                         @php
                             $id = data_get($item, 'id_daftar', data_get($item, 'id'));
                             $documentsPayload = collect(data_get($item, 'dokumen', []))
@@ -181,21 +178,23 @@
                         </div>
                     </div>
 
-                    <div class="grid gap-5 border-y border-border-soft p-5 sm:p-6">
-                        <x-admin.detail-row label="Hunian Dipilih">
-                            <span x-text="detail.hunian"></span>
-                        </x-admin.detail-row>
-                        <x-admin.detail-row label="Tipe Hunian">
-                            <span x-text="detail.tipe_hunian"></span>
-                        </x-admin.detail-row>
-                        <x-admin.detail-row label="No. Telepon">
-                            <span x-text="detail.no_hp"></span>
-                        </x-admin.detail-row>
-                        <x-admin.detail-row label="Status KIPK">
-                            <span x-text="detail.status_kipk"></span>
-                        </x-admin.detail-row>
+                    <div class="border-y border-border-soft p-5 sm:p-6">
+                        <div class="grid gap-5 sm:grid-cols-2">
+                            <x-admin.detail-row label="Hunian Dipilih">
+                                <span x-text="detail.hunian"></span>
+                            </x-admin.detail-row>
+                            <x-admin.detail-row label="Tipe Hunian">
+                                <span x-text="detail.tipe_hunian"></span>
+                            </x-admin.detail-row>
+                            <x-admin.detail-row label="No. Telepon">
+                                <span x-text="detail.no_hp"></span>
+                            </x-admin.detail-row>
+                            <x-admin.detail-row label="Status KIPK">
+                                <span x-text="detail.status_kipk"></span>
+                            </x-admin.detail-row>
+                        </div>
 
-                        <div>
+                        <div class="mt-6">
                             <h4 class="mb-3 font-semibold text-content-main">Dokumen Persyaratan</h4>
                             <div class="grid grid-cols-3 gap-3">
                                 <template x-for="doc in detail.documents" :key="doc.url">
