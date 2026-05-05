@@ -115,6 +115,11 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/pembayaran/{id}/reject', [AdminPembayaran::class, 'reject'])->name('admin.pembayaran.reject');
         Route::get('/laporan', [AdminLaporan::class, 'index'])->name('admin.laporan.index');
         Route::get('/akun', [AdminAkun::class, 'index'])->name('admin.akun.index');
+        Route::get('/akun/create', [AdminAkun::class, 'create'])->name('admin.akun.create');
+        Route::post('/akun', [AdminAkun::class, 'store'])->name('admin.akun.store');
+        Route::get('/akun/{id}/edit', [AdminAkun::class, 'edit'])->name('admin.akun.edit');
+        Route::put('/akun/{id}', [AdminAkun::class, 'update'])->name('admin.akun.update');
+        Route::delete('/akun/{id}', [AdminAkun::class, 'destroy'])->name('admin.akun.destroy');
         Route::get('/activity-log', [AdminActivityLog::class, 'index'])->name('admin.activity-log.index');
     });
 
