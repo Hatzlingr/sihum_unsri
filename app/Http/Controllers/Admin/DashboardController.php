@@ -28,11 +28,9 @@ class DashboardController extends Controller
                               Pembayaran::where('status_verifikasi', 'Menunggu')->count();
 
         // 2. Occupancy per Hunian (Progress Bar)
-        $occupancyByHunian = Hunian::withCount(['kamar as terisi' => function($query) {
-            $query->select(DB::raw('sum(terisi)'));
-        }])->withCount(['kamar as kapasitas' => function($query) {
-            $query->select(DB::raw('sum(kapasitas)'));
-        }])->get();
+        $occupancyByHunian = Hunian::withSum('kamar as terisi', 'terisi')
+            ->withSum('kamar as kapasitas', 'kapasitas')
+            ->get();
 
         // 3. Status Pembayaran (Panel)
         $paymentStatus = Pembayaran::select('status_verifikasi as status', DB::raw('count(*) as count'))

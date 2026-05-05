@@ -30,7 +30,7 @@ class PendaftaranSeeder extends Seeder
                 'hunian_id'       => 3,
                 'tgl_pengajuan'   => '2026-04-02 09:30:00',
                 'status_seleksi'  => 'Disetujui',
-                'catatan_admin'   => 'Penerima KIPK, ditempatkan di asrama KIPK.',
+                'catatan_admin'   => 'Mahasiswa aktif, disetujui.',
                 'created_at'      => now(),
                 'updated_at'      => now(),
             ],

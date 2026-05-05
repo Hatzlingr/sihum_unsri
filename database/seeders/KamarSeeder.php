@@ -14,145 +14,53 @@ class KamarSeeder extends Seeder
      */
     public function run(): void
     {
-        $kamars = [
-            // --- Rusunawa Kampus Indralaya ---
-            [
-                'hunian_id'    => 1,
-                'nomor_kamar'  => 'A101',
-                'lantai'       => 1,
-                'kapasitas'    => 2,
-                'terisi'       => 0,
-                'harga_sewa'   => 300000.00,
-                'status'       => 'Tersedia',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-            [
-                'hunian_id'    => 1,
-                'nomor_kamar'  => 'A102',
-                'lantai'       => 1,
-                'kapasitas'    => 2,
-                'terisi'       => 1,
-                'harga_sewa'   => 300000.00,
-                'status'       => 'Tersedia',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-            [
-                'hunian_id'    => 1,
-                'nomor_kamar'  => 'B201',
-                'lantai'       => 2,
-                'kapasitas'    => 2,
-                'terisi'       => 2,
-                'harga_sewa'   => 350000.00,
-                'status'       => 'Penuh',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-            [
-                'hunian_id'    => 1,
-                'nomor_kamar'  => 'B202',
-                'lantai'       => 2,
-                'kapasitas'    => 2,
-                'terisi'       => 0,
-                'harga_sewa'   => 350000.00,
-                'status'       => 'Rusak',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-
-            // --- Asrama Putra Bukit Besar ---
-            [
-                'hunian_id'    => 2,
-                'nomor_kamar'  => '101',
-                'lantai'       => 1,
-                'kapasitas'    => 4,
-                'terisi'       => 2,
-                'harga_sewa'   => 200000.00,
-                'status'       => 'Tersedia',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-            [
-                'hunian_id'    => 2,
-                'nomor_kamar'  => '102',
-                'lantai'       => 1,
-                'kapasitas'    => 4,
-                'terisi'       => 4,
-                'harga_sewa'   => 200000.00,
-                'status'       => 'Penuh',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-
-            // --- Asrama KIPK Indralaya ---
-            [
-                'hunian_id'    => 3,
-                'nomor_kamar'  => 'K101',
-                'lantai'       => 1,
-                'kapasitas'    => 2,
-                'terisi'       => 1,
-                'harga_sewa'   => 0.00,
-                'status'       => 'Tersedia',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-            [
-                'hunian_id'    => 3,
-                'nomor_kamar'  => 'K102',
-                'lantai'       => 1,
-                'kapasitas'    => 2,
-                'terisi'       => 0,
-                'harga_sewa'   => 0.00,
-                'status'       => 'Tersedia',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
+        $kamars = [];
+        
+        $hunians = [
+            1 => ['prefix' => 'A', 'harga' => 150000.00, 'kapasitas' => 2], // Rusunawa Putra (KIPK 1)
+            2 => ['prefix' => 'B', 'harga' => 150000.00, 'kapasitas' => 2], // Rusunawa Putri (KIPK 1)
+            3 => ['prefix' => 'C', 'harga' => 300000.00, 'kapasitas' => 2], // Rusunawa Bukit (KIPK 0)
+            4 => ['prefix' => 'D', 'harga' => 300000.00, 'kapasitas' => 2], // Apartemen Putra (KIPK 0)
+            5 => ['prefix' => 'E', 'harga' => 300000.00, 'kapasitas' => 2], // Apartemen Putri (KIPK 0)
+            6 => ['prefix' => 'F', 'harga' => 300000.00, 'kapasitas' => 4], // Asrama Muba (KIPK 0)
+            7 => ['prefix' => 'G', 'harga' => 300000.00, 'kapasitas' => 4], // Asrama Bangka Belitung (KIPK 0)
         ];
 
-        // Tambah kamar Hunian 1
-        for ($i = 3; $i <= 20; $i++) {
-            $kamars[] = [
-                'hunian_id'    => 1,
-                'nomor_kamar'  => 'A1' . str_pad($i, 2, '0', STR_PAD_LEFT),
-                'lantai'       => 1,
-                'kapasitas'    => 2,
-                'terisi'       => rand(0, 1),
-                'harga_sewa'   => 300000.00,
-                'status'       => 'Tersedia',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ];
-        }
+        foreach ($hunians as $hunianId => $data) {
+            for ($i = 1; $i <= 20; $i++) {
+                $terisi = rand(0, $data['kapasitas']);
+                $status = 'Tersedia';
+                if ($terisi == $data['kapasitas']) {
+                    $status = 'Penuh';
+                }
+                
+                if (rand(1, 100) > 95) {
+                    $status = 'Rusak';
+                    $terisi = 0;
+                }
 
-        // Tambah kamar Hunian 2
-        for ($i = 3; $i <= 20; $i++) {
-            $kamars[] = [
-                'hunian_id'    => 2,
-                'nomor_kamar'  => '1' . str_pad($i, 2, '0', STR_PAD_LEFT),
-                'lantai'       => 1,
-                'kapasitas'    => 4,
-                'terisi'       => rand(0, 2),
-                'harga_sewa'   => 200000.00,
-                'status'       => 'Tersedia',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ];
-        }
+                // Force specific terisi for Pendaftaran 1 (A102, hunian 1) and Pendaftaran 2 (C102, hunian 3)
+                if ($hunianId == 1 && $i == 2) {
+                    $terisi = 1;
+                    $status = 'Tersedia';
+                }
+                if ($hunianId == 3 && $i == 2) {
+                    $terisi = 1;
+                    $status = 'Tersedia';
+                }
 
-        // Tambah kamar Hunian 3
-        for ($i = 3; $i <= 20; $i++) {
-            $kamars[] = [
-                'hunian_id'    => 3,
-                'nomor_kamar'  => 'K1' . str_pad($i, 2, '0', STR_PAD_LEFT),
-                'lantai'       => 1,
-                'kapasitas'    => 2,
-                'terisi'       => rand(0, 1),
-                'harga_sewa'   => 0.00,
-                'status'       => 'Tersedia',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ];
+                $kamars[] = [
+                    'hunian_id'    => $hunianId,
+                    'nomor_kamar'  => $data['prefix'] . '1' . str_pad($i, 2, '0', STR_PAD_LEFT),
+                    'lantai'       => 1,
+                    'kapasitas'    => $data['kapasitas'],
+                    'terisi'       => $terisi,
+                    'harga_sewa'   => $data['harga'],
+                    'status'       => $status,
+                    'created_at'   => now(),
+                    'updated_at'   => now(),
+                ];
+            }
         }
 
         DB::table('kamar')->insert($kamars);
