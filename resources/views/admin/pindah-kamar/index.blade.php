@@ -79,14 +79,14 @@
                                         'kamar_tujuan' => data_get($item, 'kamarTujuan.nomor_kamar', data_get($item, 'kamar_tujuan.nomor_kamar', '-')),
                                     ];
                                 @endphp
-                                <tr class="transition hover:bg-brand-light/50">
+                                <tr class="transition hover:bg-brand-light/50" x-data="{ payload: {{ \Illuminate\Support\Js::from($detailPayload) }} }">
                                     <td class="px-5 py-4 font-semibold text-content-main">{{ data_get($item, 'mahasiswa.nama', '-') }}</td>
                                     <td class="px-5 py-4 text-content-sub">{{ data_get($item, 'jenis_pindah', '-') }}</td>
                                     <td class="px-5 py-4 text-content-sub">{{ data_get($item, 'kamarAsal.nomor_kamar', data_get($item, 'kamar_asal.nomor_kamar', '-')) }}</td>
                                     <td class="px-5 py-4 text-content-sub">{{ data_get($item, 'kamarTujuan.nomor_kamar', data_get($item, 'kamar_tujuan.nomor_kamar', '-')) }}</td>
                                     <td class="px-5 py-4"><x-admin.status-badge :status="data_get($item, 'status_approval', 'Pending')" /></td>
                                     <td class="px-5 py-4">
-                                        <x-admin.action-button type="button" variant="secondary" icon="bi-eye" @click='openModal(@json($detailPayload))'>Detail</x-admin.action-button>
+                                        <x-admin.action-button type="button" variant="secondary" icon="bi-eye" @click="openModal(payload)">Detail</x-admin.action-button>
                                     </td>
                                 </tr>
                             @empty

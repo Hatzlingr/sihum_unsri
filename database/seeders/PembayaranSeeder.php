@@ -16,7 +16,7 @@ class PembayaranSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('pembayaran')->insert([
+        $pembayarans = [
             // Pembayaran awal - mahasiswa 1 (Rusunawa KIPK, Rp 150.000)
             [
                 'pendaftaran_id'    => 1,
@@ -80,6 +80,31 @@ class PembayaranSeeder extends Seeder
                 'created_at'        => now(),
                 'updated_at'        => now(),
             ],
-        ]);
+        ];
+
+        // Tambahan data pembayaran untuk pendaftaran baru
+        $statuses = ['Menunggu', 'Sudah', 'Ditolak', 'Menunggu', 'Belum Bayar'];
+        for ($i = 4; $i <= 8; $i++) {
+            $status = $statuses[$i - 4];
+            $tglBayar = in_array($status, ['Menunggu', 'Sudah', 'Ditolak']) ? now()->subDays(rand(1, 5)) : null;
+            $bukti = in_array($status, ['Menunggu', 'Sudah', 'Ditolak']) ? 'bukti/pembayaran/dummy.jpg' : null;
+            
+            $pembayarans[] = [
+                'pendaftaran_id'    => $i,
+                'perpanjangan_id'   => null,
+                'jenis_pembayaran'  => 'Awal',
+                'jumlah_bayar'      => 300000.00, // asumsikan 300rb
+                'bukti_transfer'    => $bukti,
+                'tgl_bayar'         => $tglBayar,
+                'status_verifikasi' => $status,
+                'periode_mulai'     => now()->addDays(rand(1, 5))->format('Y-m-d'),
+                'periode_selesai'   => now()->addMonths(6)->format('Y-m-d'),
+                'catatan_admin'     => $status === 'Ditolak' ? 'Bukti transfer buram/tidak jelas.' : null,
+                'created_at'        => now(),
+                'updated_at'        => now(),
+            ];
+        }
+
+        DB::table('pembayaran')->insert($pembayarans);
     }
 }

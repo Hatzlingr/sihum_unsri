@@ -75,7 +75,7 @@
                                 'rooms' => $roomsPayload,
                             ];
                         @endphp
-                        <div class="rounded-3xl border border-border-soft bg-bg-surface p-5 transition hover:border-brand hover:bg-brand-light">
+                        <div class="rounded-3xl border border-border-soft bg-bg-surface p-5 transition hover:border-brand hover:bg-brand-light" x-data="{ payload: {{ \Illuminate\Support\Js::from($detailPayload) }} }">
                             <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                                 <div>
                                     <h3 class="text-xl font-bold text-content-main">{{ data_get($student, 'nama', '-') }}</h3>
@@ -84,7 +84,7 @@
                                     <p class="mt-3 text-sm font-semibold text-content-main">{{ data_get($student, 'jenis_kelamin', data_get($student, 'gender', '-')) }}</p>
                                     <p class="mt-2 text-sm font-semibold text-content-main">{{ data_get($hunian, 'nama_hunian', '-') }}</p>
                                 </div>
-                                <x-admin.action-button type="button" variant="secondary" icon="bi-pin-map" @click='openModal(@json($detailPayload))'>Penempatan</x-admin.action-button>
+                                <x-admin.action-button type="button" variant="secondary" icon="bi-pin-map" @click="openModal(payload)">Penempatan</x-admin.action-button>
                             </div>
                         </div>
                     @empty
