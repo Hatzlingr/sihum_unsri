@@ -16,11 +16,12 @@
             ['key' => 'pembayaran', 'label' => 'Verifikasi Pembayaran', 'icon' => 'bi-credit-card', 'route' => 'admin.pembayaran.index', 'fallback' => '/admin/pembayaran'],
             ['key' => 'penempatan', 'label' => 'Penempatan', 'icon' => 'bi-pin-map', 'route' => 'admin.penempatan.index', 'fallback' => '/admin/penempatan'],
             ['key' => 'perpanjangan', 'label' => 'Perpanjangan', 'icon' => 'bi-calendar-plus', 'route' => 'admin.perpanjangan.index', 'fallback' => '/admin/perpanjangan'],
+            ['key' => 'pemberhentian', 'label' => 'Pemberhentian', 'icon' => 'bi-box-arrow-right', 'route' => 'admin.pemberhentian.index', 'fallback' => '/admin/pemberhentian'],
             ['key' => 'pindah-kamar', 'label' => 'Pindah Kamar', 'icon' => 'bi-arrow-left-right', 'route' => 'admin.pindah-kamar.index', 'fallback' => '/admin/pindah-kamar'],
         ],
         'Sistem' => [
             ['key' => 'laporan', 'label' => 'Laporan', 'icon' => 'bi-clipboard-data', 'route' => 'admin.laporan.index', 'fallback' => '/admin/laporan'],
-            ['key' => 'akun', 'label' => 'Akun', 'icon' => 'bi-person-gear', 'route' => 'admin.pengelola.index', 'fallback' => '/admin/pengelola'],
+            ['key' => 'akun', 'label' => 'Akun', 'icon' => 'bi-person-gear', 'route' => 'admin.akun.index', 'fallback' => '/admin/akun'],
             ['key' => 'activity-log', 'label' => 'Activity Log', 'icon' => 'bi-activity', 'route' => 'admin.activity-log.index', 'fallback' => '/admin/activity-log'],
         ],
     ];

@@ -109,7 +109,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/perpanjangan', [AdminPerpanjangan::class, 'index'])->name('admin.perpanjangan.index');
         Route::patch('/perpanjangan/{id}/approve', [AdminPerpanjangan::class, 'approve'])->name('admin.perpanjangan.approve');
         Route::patch('/perpanjangan/{id}/reject', [AdminPerpanjangan::class, 'reject'])->name('admin.perpanjangan.reject');
-        
+        Route::get('/pemberhentian', fn() => view('admin.pemberhentian.index'))->name('admin.pemberhentian.index');
         Route::get('/pembayaran', [AdminPembayaran::class, 'index'])->name('admin.pembayaran.index');
         Route::patch('/pembayaran/{id}/approve', [AdminPembayaran::class, 'approve'])->name('admin.pembayaran.approve');
         Route::patch('/pembayaran/{id}/reject', [AdminPembayaran::class, 'reject'])->name('admin.pembayaran.reject');

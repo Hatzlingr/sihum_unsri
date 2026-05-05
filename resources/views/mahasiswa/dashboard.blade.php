@@ -49,6 +49,7 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="min-w-0">
                         {{-- Card Pembayaran --}}
+                        <p class="text-sm font-medium text-content-sub">Status Pembayaran</p>
                         <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">
                             {{ $pembayaranTerakhir?->status_verifikasi ?? 'Belum Ada' }}
                         </p>
@@ -67,6 +68,7 @@
                 class="rounded-3xl border border-border-soft bg-bg-base p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md">
                 <div class="flex items-start justify-between gap-4">
                     <div class="min-w-0">
+                        <p class="text-sm font-medium text-content-sub">Periode Sewa</p>
                         <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">
                             {{ $sisaHari }} hari
                         </p>
@@ -85,6 +87,7 @@
                 class="rounded-3xl border border-border-soft bg-bg-base p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md">
                 <div class="flex items-start justify-between gap-4">
                     <div class="min-w-0">
+                        <p class="text-sm font-medium text-content-sub">Kamar yang Ditempati</p>
                         <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">
                             {{ $penempatan?->kamar?->nomor_kamar ?? '--' }}
                         </p>
