@@ -16,6 +16,7 @@
             ['key' => 'pembayaran', 'label' => 'Verifikasi Pembayaran', 'icon' => 'bi-credit-card', 'route' => 'admin.pembayaran.index', 'fallback' => '/admin/pembayaran'],
             ['key' => 'penempatan', 'label' => 'Penempatan', 'icon' => 'bi-pin-map', 'route' => 'admin.penempatan.index', 'fallback' => '/admin/penempatan'],
             ['key' => 'perpanjangan', 'label' => 'Perpanjangan', 'icon' => 'bi-calendar-plus', 'route' => 'admin.perpanjangan.index', 'fallback' => '/admin/perpanjangan'],
+            ['key' => 'pemberhentian', 'label' => 'Pemberhentian', 'icon' => 'bi-box-arrow-right', 'route' => 'admin.pemberhentian.index', 'fallback' => '/admin/pemberhentian'],
             ['key' => 'pindah-kamar', 'label' => 'Pindah Kamar', 'icon' => 'bi-arrow-left-right', 'route' => 'admin.pindah-kamar.index', 'fallback' => '/admin/pindah-kamar'],
         ],
         'Sistem' => [
