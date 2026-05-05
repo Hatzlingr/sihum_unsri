@@ -10,6 +10,11 @@ use App\Http\Controllers\Mahasiswa\BiodataController as MahasiswaBiodata;
 use App\Http\Controllers\Mahasiswa\PengaturanController as MahasiswaPengaturan;
 use App\Http\Controllers\Mahasiswa\PengajuanController as MahasiswaPengajuan;
 use App\Http\Controllers\Mahasiswa\PembayaranController as  MahasiswaPembayaran;
+use App\Http\Controllers\Pengelola\DashboardController as PengelolaDashboard;
+use App\Http\Controllers\Pengelola\KamarController as PengelolaKamar;
+use App\Http\Controllers\Pengelola\PenghuniController as PengelolaPenghuni;
+use App\Http\Controllers\Pengelola\PindahKamarController as PengelolaPindahKamar;
+use App\Http\Controllers\Pengelola\LaporanController as PengelolaLaporan;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,8 +91,27 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Middleware 'pengelola'
-    Route::middleware(['pengelola'])->prefix('pengelola')->group(function () {
-        Route::get('/dashboard', fn() => view('pengelola.dashboard'))->name('pengelola.dashboard');
+    Route::middleware(['pengelola'])->prefix('pengelola')->name('pengelola.')->group(function () {
+        Route::get('/dashboard', [PengelolaDashboard::class, 'index'])->name('dashboard');
+        
+        // Kamar Management
+        Route::get('/kamar', [PengelolaKamar::class, 'index'])->name('kamar.index');
+        Route::get('/kamar/{id}', [PengelolaKamar::class, 'show'])->name('kamar.show');
+        Route::put('/kamar/{id}/status', [PengelolaKamar::class, 'updateStatus'])->name('kamar.update-status');
+        
+        // Penghuni Management
+        Route::get('/penghuni', [PengelolaPenghuni::class, 'index'])->name('penghuni.index');
+        Route::get('/penghuni/{id}', [PengelolaPenghuni::class, 'show'])->name('penghuni.show');
+        
+        // Pindah Kamar Verification
+        Route::get('/pindah-kamar', [PengelolaPindahKamar::class, 'index'])->name('pindah-kamar.index');
+        Route::post('/pindah-kamar/{id}/approve', [PengelolaPindahKamar::class, 'approve'])->name('pindah-kamar.approve');
+        Route::post('/pindah-kamar/{id}/reject', [PengelolaPindahKamar::class, 'reject'])->name('pindah-kamar.reject');
+        
+        // Laporan
+        Route::get('/laporan', [PengelolaLaporan::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/export-pdf', [PengelolaLaporan::class, 'exportPdf'])->name('laporan.export-pdf');
+        Route::get('/laporan/export-csv', [PengelolaLaporan::class, 'exportCsv'])->name('laporan.export-csv');
     });
 
     // Middleware 'mahasiswa'
