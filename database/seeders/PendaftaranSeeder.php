@@ -15,7 +15,7 @@ class PendaftaranSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('pendaftaran')->insert([
+        $pendaftarans = [
             [
                 'mahasiswa_id'    => 1,
                 'hunian_id'       => 1,
@@ -43,6 +43,21 @@ class PendaftaranSeeder extends Seeder
                 'created_at'      => now(),
                 'updated_at'      => now(),
             ],
-        ]);
+        ];
+
+        // Tambahan data dummy calon penempatan (Status: Disetujui, tapi belum ditempatkan)
+        for ($i = 4; $i <= 8; $i++) {
+            $pendaftarans[] = [
+                'mahasiswa_id'    => $i,
+                'hunian_id'       => rand(1, 3), // Acak hunian 1-3
+                'tgl_pengajuan'   => now()->subDays(rand(1, 10)),
+                'status_seleksi'  => 'Disetujui',
+                'catatan_admin'   => 'Disetujui secara otomatis untuk testing penempatan.',
+                'created_at'      => now(),
+                'updated_at'      => now(),
+            ];
+        }
+
+        DB::table('pendaftaran')->insert($pendaftarans);
     }
 }

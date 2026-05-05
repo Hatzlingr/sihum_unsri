@@ -3,7 +3,7 @@
     $pembayaranItems = method_exists($pembayaranSource, 'items') ? collect($pembayaranSource->items()) : collect($pembayaranSource);
     $activeStatus = request('status', 'Menunggu');
     $filteredItems = $pembayaranItems->isNotEmpty()
-        ? $pembayaranItems->filter(fn ($item) => request()->filled('status') ? data_get($item, 'status_verifikasi') === $activeStatus : true)
+        ? $pembayaranItems->filter(fn ($item) => data_get($item, 'status_verifikasi') === $activeStatus)
         : collect();
 
     $counts = $counts ?? [
@@ -124,7 +124,8 @@
                         <button
                             type="button"
                             class="mb-3 block w-full rounded-2xl border border-border-soft bg-bg-surface px-4 py-3 text-left transition last:mb-0 hover:border-brand hover:bg-brand-light"
-                            @click='openModal(@json($detailPayload))'
+                            x-data="{ payload: {{ \Illuminate\Support\Js::from($detailPayload) }} }"
+                            @click="openModal(payload)"
                         >
                             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                 <div>

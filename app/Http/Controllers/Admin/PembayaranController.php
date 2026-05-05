@@ -10,8 +10,8 @@ class PembayaranController extends Controller
 {
     public function index()
     {
-        $pembayarans = Pembayaran::with(['pendaftaran.mahasiswa', 'perpanjangan.penempatan.pendaftaran.mahasiswa'])->orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.pembayaran.index', compact('pembayarans'));
+        $pembayaran = Pembayaran::with(['pendaftaran.mahasiswa', 'perpanjangan.penempatan.pendaftaran.mahasiswa'])->orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.pembayaran.index', compact('pembayaran'));
     }
 
     public function approve($id)

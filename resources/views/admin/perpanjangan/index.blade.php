@@ -78,14 +78,14 @@
                                     'alasan' => data_get($item, 'alasan', '-'),
                                 ];
                             @endphp
-                            <tr class="transition hover:bg-brand-light/50">
+                            <tr class="transition hover:bg-brand-light/50" x-data="{ payload: {{ \Illuminate\Support\Js::from($detailPayload) }} }">
                                 <td class="px-5 py-4 font-semibold text-content-main">{{ $detailPayload['mahasiswa'] }}</td>
                                 <td class="px-5 py-4 text-content-sub">{{ $detailPayload['durasi_bulan'] }} bulan</td>
                                 <td class="px-5 py-4 text-content-sub">{{ $detailPayload['tgl_ajuan'] }}</td>
                                 <td class="px-5 py-4 text-content-sub">{{ $detailPayload['tgl_keluar_baru'] }}</td>
                                 <td class="px-5 py-4"><x-admin.status-badge :status="$detailPayload['status']" /></td>
                                 <td class="px-5 py-4">
-                                    <x-admin.action-button type="button" variant="secondary" icon="bi-eye" @click='openModal(@json($detailPayload))'>Detail</x-admin.action-button>
+                                    <x-admin.action-button type="button" variant="secondary" icon="bi-eye" @click="openModal(payload)">Detail</x-admin.action-button>
                                 </td>
                             </tr>
                         @empty

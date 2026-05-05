@@ -10,8 +10,8 @@ class PerpanjanganController extends Controller
 {
     public function index()
     {
-        $perpanjangans = Perpanjangan::with(['penempatan.pendaftaran.mahasiswa', 'penempatan.kamar.hunian'])->paginate(10);
-        return view('admin.perpanjangan.index', compact('perpanjangans'));
+        $perpanjangan = Perpanjangan::with(['penempatan.pendaftaran.mahasiswa', 'penempatan.kamar.hunian'])->paginate(10);
+        return view('admin.perpanjangan.index', compact('perpanjangan'));
     }
 
     public function approve($id)
