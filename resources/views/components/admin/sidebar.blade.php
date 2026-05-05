@@ -20,7 +20,7 @@
         ],
         'Sistem' => [
             ['key' => 'laporan', 'label' => 'Laporan', 'icon' => 'bi-clipboard-data', 'route' => 'admin.laporan.index', 'fallback' => '/admin/laporan'],
-            ['key' => 'akun', 'label' => 'Akun', 'icon' => 'bi-person-gear', 'route' => 'admin.pengelola.index', 'fallback' => '/admin/pengelola'],
+            ['key' => 'akun', 'label' => 'Akun', 'icon' => 'bi-person-gear', 'route' => 'admin.akun.index', 'fallback' => '/admin/akun'],
             ['key' => 'activity-log', 'label' => 'Activity Log', 'icon' => 'bi-activity', 'route' => 'admin.activity-log.index', 'fallback' => '/admin/activity-log'],
         ],
     ];

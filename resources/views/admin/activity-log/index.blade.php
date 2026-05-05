@@ -58,7 +58,11 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-5 py-6">
-                                    <x-admin.skeleton-list :rows="9" height="h-11" />
+                                    <x-admin.empty-state 
+                                        title="Belum ada aktivitas" 
+                                        description="Tidak ada log aktivitas yang ditemukan berdasarkan pencarian Anda." 
+                                        icon="bi-activity"
+                                    />
                                 </td>
                             </tr>
                         @endforelse
