@@ -1,9 +1,21 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Admin\MahasiswaController as AdminMahasiswa;
+use App\Http\Controllers\Admin\HunianController as AdminHunian;
+use App\Http\Controllers\Admin\KamarController as AdminKamar;
+use App\Http\Controllers\Admin\PendaftaranController as AdminPendaftaran;
+use App\Http\Controllers\Admin\PenempatanController as AdminPenempatan;
+use App\Http\Controllers\Admin\PindahKamarController as AdminPindahKamar;
+use App\Http\Controllers\Admin\PerpanjanganController as AdminPerpanjangan;
+use App\Http\Controllers\Admin\PembayaranController as AdminPembayaran;
+use App\Http\Controllers\Admin\LaporanController as AdminLaporan;
+use App\Http\Controllers\Admin\AkunController as AdminAkun;
+use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLog;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboard;
 use App\Http\Controllers\Mahasiswa\HunianController as MahasiswaHunian;
 use App\Http\Controllers\Mahasiswa\BiodataController as MahasiswaBiodata;
@@ -80,9 +92,25 @@ Route::middleware(['auth'])->group(function () {
     // Middleware 'admin' yang sudah kamu buat tadi
     Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('admin.dashboard');
-        Route::get('/mahasiswa', fn() => view('admin.mahasiswa.index'))->name('admin.mahasiswa.index');
-        Route::get('/hunian', fn() => view('admin.hunian.index'))->name('admin.hunian.index');
-        Route::get('/pembayaran', fn() => view('admin.pembayaran.index'))->name('admin.pembayaran.index');
+        Route::get('/mahasiswa', [AdminMahasiswa::class, 'index'])->name('admin.mahasiswa.index');
+        Route::get('/hunian', [AdminHunian::class, 'index'])->name('admin.hunian.index');
+        Route::get('/kamar', [AdminKamar::class, 'index'])->name('admin.kamar.index');
+        Route::get('/pendaftaran', [AdminPendaftaran::class, 'index'])->name('admin.pendaftaran.index');
+        Route::get('/penempatan', [AdminPenempatan::class, 'index'])->name('admin.penempatan.index');
+        Route::post('/penempatan/{id}', [AdminPenempatan::class, 'store'])->name('admin.penempatan.store');
+        
+        Route::get('/pindah-kamar', [AdminPindahKamar::class, 'index'])->name('admin.pindah-kamar.index');
+        
+        Route::get('/perpanjangan', [AdminPerpanjangan::class, 'index'])->name('admin.perpanjangan.index');
+        Route::patch('/perpanjangan/{id}/approve', [AdminPerpanjangan::class, 'approve'])->name('admin.perpanjangan.approve');
+        Route::patch('/perpanjangan/{id}/reject', [AdminPerpanjangan::class, 'reject'])->name('admin.perpanjangan.reject');
+        
+        Route::get('/pembayaran', [AdminPembayaran::class, 'index'])->name('admin.pembayaran.index');
+        Route::patch('/pembayaran/{id}/approve', [AdminPembayaran::class, 'approve'])->name('admin.pembayaran.approve');
+        Route::patch('/pembayaran/{id}/reject', [AdminPembayaran::class, 'reject'])->name('admin.pembayaran.reject');
+        Route::get('/laporan', [AdminLaporan::class, 'index'])->name('admin.laporan.index');
+        Route::get('/akun', [AdminAkun::class, 'index'])->name('admin.akun.index');
+        Route::get('/activity-log', [AdminActivityLog::class, 'index'])->name('admin.activity-log.index');
     });
 
     // Middleware 'pengelola'

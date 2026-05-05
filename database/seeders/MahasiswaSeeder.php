@@ -22,7 +22,7 @@ class MahasiswaSeeder extends Seeder
         $mahasiswa = [
             [
                 'user_id'      => 3,
-                'nim'          => '09021382126001',
+                'nim'          => '001',
                 'nama'         => 'Ahmad Fauzi',
                 'email'        => 'ahmad.fauzi@student.unsri.ac.id',
                 'prodi'        => 'Teknik Informatika',
@@ -34,7 +34,7 @@ class MahasiswaSeeder extends Seeder
             ],
             [
                 'user_id'      => 4,
-                'nim'          => '09021382126002',
+                'nim'          => '002',
                 'nama'         => 'Budi Santoso',
                 'email'        => 'budi.santoso@student.unsri.ac.id',
                 'prodi'        => 'Sistem Informasi',
@@ -46,7 +46,7 @@ class MahasiswaSeeder extends Seeder
             ],
             [
                 'user_id'      => 5,
-                'nim'          => '09021382126003',
+                'nim'          => '003',
                 'nama'         => 'Citra Dewi',
                 'email'        => 'citra.dewi@student.unsri.ac.id',
                 'prodi'        => 'Ilmu Komputer',
@@ -65,7 +65,7 @@ class MahasiswaSeeder extends Seeder
         for ($i = 4; $i <= 23; $i++) {
             $mahasiswa[] = [
                 'user_id'      => $i + 2, // ID 6, 7, ... 25
-                'nim'          => '0902128' . $faker->unique()->numerify('#######'),
+                'nim'          => str_pad($i, 3, '0', STR_PAD_LEFT),
                 'nama'         => $faker->name(),
                 'email'        => 'mhs' . $i . '@student.unsri.ac.id',
                 'prodi'        => $faker->randomElement(['Teknik Informatika', 'Sistem Informasi', 'Ilmu Komputer', 'Teknik Komputer', 'Sistem Komputer']),
@@ -75,6 +75,12 @@ class MahasiswaSeeder extends Seeder
                 'created_at'   => now(),
                 'updated_at'   => now(),
             ];
+        }
+        foreach ($mahasiswa as $mhs) {
+            // Update username di tabel users menjadi NIM
+            DB::table('users')
+                ->where('id', $mhs['user_id'])
+                ->update(['username' => $mhs['nim']]);
         }
 
         DB::table('mahasiswa')->insert($mahasiswa);

@@ -62,7 +62,7 @@
 
         <div class="hidden items-center gap-3 lg:flex">
             <a href="{{ route('login') }}" class="rounded-full px-4 py-2 text-sm font-bold text-content-sub transition hover:bg-bg-surface hover:text-brand">
-                Login Su
+                Login
             </a>
             <a href="{{ route('register') }}" class="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand/20 transition duration-300 hover:-translate-y-0.5 hover:bg-brand/90 hover:shadow-xl hover:shadow-brand/20">
                 Daftar
@@ -112,7 +112,7 @@
 
             <div class="mt-3 grid grid-cols-2 gap-3">
                 <a href="{{ route('login') }}" class="rounded-2xl bg-bg-surface px-4 py-3 text-center text-sm font-bold text-content-main transition hover:bg-brand-soft hover:text-brand">
-                    Login Su
+                    Login
                 </a>
                 <a href="{{ route('register') }}" class="rounded-2xl bg-brand px-4 py-3 text-center text-sm font-bold text-white shadow-md shadow-brand/20 transition hover:bg-brand/90">
                     Daftar

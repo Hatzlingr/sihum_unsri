@@ -41,6 +41,18 @@ class Mahasiswa extends Model
         return $this->hasMany(Pendaftaran::class, 'mahasiswa_id', 'id_mahasiswa');
     }
 
+    public function penempatan()
+    {
+        return $this->hasOneThrough(
+            Penempatan::class, 
+            Pendaftaran::class, 
+            'mahasiswa_id', // Foreign key on Pendaftaran table...
+            'pendaftaran_id', // Foreign key on Penempatan table...
+            'id_mahasiswa', // Local key on Mahasiswa table...
+            'id_daftar' // Local key on Pendaftaran table...
+        );
+    }
+
     public function pindahKamar()
     {
         return $this->hasMany(PindahKamar::class, 'mahasiswa_id', 'id_mahasiswa');

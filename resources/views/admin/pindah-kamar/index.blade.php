@@ -142,17 +142,14 @@
                         </x-admin.detail-row>
                         <x-admin.status-badge :status="'Status'" x-text="detail.status_approval" />
 
-                        <div class="grid grid-cols-2 gap-3 pt-3">
-                            <form method="POST" x-bind:action="approveAction()">
-                                @csrf
-                                @method('PATCH')
-                                <x-admin.action-button type="submit" icon="bi-check-lg">Setujui</x-admin.action-button>
-                            </form>
-                            <form method="POST" x-bind:action="rejectAction()">
-                                @csrf
-                                @method('PATCH')
-                                <x-admin.action-button type="submit" variant="danger" icon="bi-x-lg">Tolak</x-admin.action-button>
-                            </form>
+                        <div class="flex justify-end pt-3">
+                            <button
+                                type="button"
+                                class="inline-flex items-center justify-center gap-2 rounded-2xl border border-border-soft bg-bg-base px-4 py-2.5 text-sm font-semibold text-content-main transition hover:border-brand hover:bg-brand-light hover:text-brand"
+                                @click="closeModal()"
+                            >
+                                Tutup
+                            </button>
                         </div>
                     </div>
                 </x-admin.panel>
