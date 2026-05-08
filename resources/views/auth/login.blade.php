@@ -37,12 +37,12 @@
 
                     {{-- Username Field --}}
                     <div>
-                        <label class="text-sm font-medium">NIM</label>
+                        <label class="text-sm font-medium">Username</label>
                         <input type="text" name="username" 
                             value="{{ old('username') }}"
                             {{-- py-2.5 dan leading-relaxed agar teks simetris di tengah --}}
                             class="mt-2 w-full rounded-xl bg-bg-surface px-4 py-2.5 text-sm leading-relaxed outline-none transition-all focus:ring-1 focus:ring-brand @error('username') border border-red-500 ring-1 ring-red-500 @enderror"
-                            placeholder="Masukkan NIM Anda" required>
+                            placeholder="Masukkan username anda" required>
                         
                         @error('username')
                             <p class="mt-1.5 text-[11px] font-medium text-red-500 flex items-center gap-1">

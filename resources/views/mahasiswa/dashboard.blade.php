@@ -32,7 +32,9 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="min-w-0">
                         <p class="text-sm font-medium text-content-sub">Status Hunian</p>
-                        <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">Aktif</p>
+                        <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">
+                            {{ $penempatan->status_hunian ?? 'Belum ada' }}
+                        </p>
                     </div>
                     <span
                         class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
@@ -70,7 +72,7 @@
                     <div class="min-w-0">
                         <p class="text-sm font-medium text-content-sub">Periode Sewa</p>
                         <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">
-                            {{ $sisaHari }} hari
+                            {{ $sisaHari }} Hari
                         </p>
                     </div>
                     <span
@@ -89,7 +91,7 @@
                     <div class="min-w-0">
                         <p class="text-sm font-medium text-content-sub">Kamar yang Ditempati</p>
                         <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">
-                            {{ $penempatan?->kamar?->nomor_kamar ?? '--' }}
+                            {{ $penempatan?->kamar?->nomor_kamar ?? '-' }}
                         </p>
                     </div>
                     <span
@@ -103,114 +105,160 @@
             </article>
         </section>
 
-        {{-- Grid 2 Kolom: Info Hunian & Aksi Cepat --}}
-        <section class="grid gap-6 xl:grid-cols-2">
-            {{-- Info Hunian --}}
-            <div class="p-5 sm:p-6 space-y-4">
-                {{-- Nama Gedung/Hunian --}}
-                <div
-                    class="flex items-center justify-between rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
-                    <div class="flex items-center gap-3">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                            <i class="bi bi-buildings"></i>
-                        </span>
-                        <div class="flex flex-col">
-                            <span class="text-xs text-content-sub">Nama Hunian</span>
-                            <span class="text-sm font-semibold text-content-main">
-                                {{ $penempatan?->kamar?->hunian?->nama_hunian ?? 'Belum ada data' }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+        {{-- Container Utama --}}
+        <div class="space-y-6">
 
-                {{-- Lokasi (Sebelumnya kita tulis alamat, sekarang ganti lokasi) --}}
-                <div
-                    class="flex items-center justify-between rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
-                    <div class="flex items-center gap-3">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                            <i class="bi bi-geo-alt"></i>
-                        </span>
-                        <div class="flex flex-col">
-                            <span class="text-xs text-content-sub">Lokasi</span>
-                            <span class="text-sm font-semibold text-content-main">
-                                {{ $penempatan?->kamar?->hunian?->lokasi ?? '--' }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+            {{-- Baris Atas: Info Hunian & Aksi Cepat --}}
+            <div class="grid gap-6 xl:grid-cols-2">
 
-                {{-- Nomor Kamar & Lantai --}}
-                <div
-                    class="flex items-center justify-between rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
-                    <div class="flex items-center gap-3">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                            <i class="bi bi-door-open"></i>
+                {{-- Section 1: Info Hunian --}}
+                <section
+                    class="flex flex-col overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
+                    <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+                            <i class="bi bi-info-circle"></i>
                         </span>
-                        <div class="flex flex-col">
-                            <span class="text-xs text-content-sub">Nomor Kamar</span>
-                            <span class="text-sm font-semibold text-content-main">
-                                Kamar {{ $penempatan?->kamar?->nomor_kamar ?? '--' }} (Lantai
-                                {{ $penempatan?->kamar?->lantai ?? '-' }})
+                        <h2 class="text-base font-semibold text-content-main sm:text-lg">Detail Hunian</h2>
+                    </div>
+
+                    <div class="flex-1 p-5 sm:p-6 space-y-3">
+                        {{-- Nama Gedung --}}
+                        <div
+                            class="flex items-center gap-3 rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
+                            <span
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                                <i class="bi bi-buildings"></i>
                             </span>
+                            <div class="flex flex-col min-w-0">
+                                <span class="text-xs text-content-sub">Nama Hunian</span>
+                                <span class="truncate text-sm font-semibold text-content-main">
+                                    {{ $penempatan?->kamar?->hunian?->nama_hunian ?? 'Belum ada data' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        {{-- Lokasi --}}
+                        <div
+                            class="flex items-center gap-3 rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
+                            <span
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                                <i class="bi bi-geo-alt"></i>
+                            </span>
+                            <div class="flex flex-col min-w-0">
+                                <span class="text-xs text-content-sub">Lokasi</span>
+                                <span class="truncate text-sm font-semibold text-content-main">
+                                    {{ $penempatan?->kamar?->hunian?->lokasi ?? '-' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        {{-- Kamar --}}
+                        <div
+                            class="flex items-center gap-3 rounded-2xl border border-border-soft bg-bg-surface px-4 py-3">
+                            <span
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                                <i class="bi bi-door-open"></i>
+                            </span>
+                            <div class="flex flex-col min-w-0">
+                                <span class="text-xs text-content-sub">Detail Kamar</span>
+                                <span class="truncate text-sm font-semibold text-content-main">
+                                    Kamar {{ $penempatan?->kamar?->nomor_kamar ?? '-' }} | Lantai
+                                    {{ $penempatan?->kamar?->lantai ?? '-' }}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </section>
+
+                {{-- Section 2: Aksi Cepat --}}
+                <section
+                    class="flex flex-col overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
+                    <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+                            <i class="bi bi-lightning-charge"></i>
+                        </span>
+                        <h2 class="text-base font-semibold text-content-main sm:text-lg">Aksi Cepat</h2>
+                    </div>
+
+                    {{-- Tambahkan items-center & justify-center agar konten aksi cepat berada di tengah box jika ada
+                    space sisa --}}
+                    <div class="flex flex-1 items-center justify-center p-5 sm:p-6">
+                        <div class="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+                            <a href="{{ route('mahasiswa.pengajuan') }}"
+                                class="group flex items-center gap-3 rounded-2xl border border-border-soft bg-bg-base p-3 transition-all duration-200 hover:border-brand hover:bg-brand-light/50">
+                                <span
+                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                                    <i class="bi bi-file-earmark-plus"></i>
+                                </span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="truncate text-sm font-semibold text-content-main">Ajukan Hunian</span>
+                                    <span class="truncate text-xs text-slate-500">Daftar kamar baru</span>
+                                </div>
+                            </a>
+
+                            <a href="{{ route('mahasiswa.pembayaran') }}"
+                                class="group flex items-center gap-3 rounded-2xl border border-border-soft bg-bg-base p-3 transition-all duration-200 hover:border-brand hover:bg-brand-light/50">
+                                <span
+                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                                    <i class="bi bi-credit-card"></i>
+                                </span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="truncate text-sm font-semibold text-content-main">Bayar Sekarang</span>
+                                    <span class="truncate text-xs text-slate-500">Tagihan & riwayat</span>
+                                </div>
+                            </a>
+
+                            <a href="{{ route('mahasiswa.pindah-kamar') }}"
+                                class="group flex items-center gap-3 rounded-2xl border border-border-soft bg-bg-base p-3 transition-all duration-200 hover:border-brand hover:bg-brand-light/50">
+                                <span
+                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
+                                    <i class="bi bi-arrow-left-right"></i>
+                                </span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="truncate text-sm font-semibold text-content-main">Pindah Kamar</span>
+                                    <span class="truncate text-xs text-slate-500">Pengajuan mutasi</span>
+                                </div>
+                            </a>
+
+                            <a href="{{ route('mahasiswa.biodata') }}"
+                                class="group flex items-center gap-3 rounded-2xl border border-border-soft bg-bg-base p-3 transition-all duration-200 hover:border-brand hover:bg-brand-light/50">
+                                <span
+                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                                    <i class="bi bi-person-lines-fill"></i>
+                                </span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="truncate text-sm font-semibold text-content-main">Lihat Biodata</span>
+                                    <span class="truncate text-xs text-slate-500">Profil mahasiswa</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
             </div>
 
-            {{-- Aksi Cepat --}}
+            {{-- Section 3: Pengumuman (Full Width) --}}
             <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
                 <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
                     <span
                         class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
-                        <i class="bi bi-lightning-charge"></i>
+                        <i class="bi bi-megaphone"></i>
                     </span>
-                    <h2 class="text-base font-semibold text-content-main sm:text-lg">Aksi Cepat</h2>
+                    <h2 class="text-base font-semibold text-content-main sm:text-lg">Pengumuman</h2>
                 </div>
                 <div class="p-5 sm:p-6">
-                    <div class="grid gap-3 sm:grid-cols-2">
-                        <a href="{{ route('mahasiswa.pengajuan') }}"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl border border-border-soft bg-bg-base px-4 py-2.5 text-sm font-semibold text-content-main transition hover:border-brand hover:bg-brand-light hover:text-brand">
-                            <i class="bi bi-file-earmark-plus"></i>
-                            Ajukan Hunian
-                        </a>
-                        <a href="{{ route('mahasiswa.pembayaran') }}"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl border border-border-soft bg-bg-base px-4 py-2.5 text-sm font-semibold text-content-main transition hover:border-brand hover:bg-brand-light hover:text-brand">
-                            <i class="bi bi-credit-card"></i>
-                            Bayar Sekarang
-                        </a>
-                        <a href="{{ route('mahasiswa.pindah-kamar') }}"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl border border-border-soft bg-bg-base px-4 py-2.5 text-sm font-semibold text-content-main transition hover:border-brand hover:bg-brand-light hover:text-brand">
-                            <i class="bi bi-arrow-left-right"></i>
-                            Pindah Kamar
-                        </a>
-                        <a href="{{ route('mahasiswa.biodata') }}"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl border border-border-soft bg-bg-base px-4 py-2.5 text-sm font-semibold text-content-main transition hover:border-brand hover:bg-brand-light hover:text-brand">
-                            <i class="bi bi-person-lines-fill"></i>
-                            Lihat Biodata
-                        </a>
+                    <div class="flex flex-col items-center justify-center py-10 text-center">
+                        <span
+                            class="flex h-16 w-16 items-center justify-center rounded-full bg-bg-surface text-content-sub">
+                            <i class="bi bi-megaphone text-3xl"></i>
+                        </span>
+                        <p class="mt-4 text-sm font-medium text-content-sub">Belum ada pengumuman saat ini.</p>
                     </div>
                 </div>
             </section>
-        </section>
 
-        {{-- Pengumuman --}}
-        <section class="overflow-hidden rounded-3xl border border-border-soft bg-bg-base shadow-sm">
-            <div class="flex items-center gap-3 border-b border-border-soft px-5 py-4 sm:px-6">
-                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-brand">
-                    <i class="bi bi-megaphone"></i>
-                </span>
-                <h2 class="text-base font-semibold text-content-main sm:text-lg">Pengumuman</h2>
-            </div>
-            <div class="p-5 sm:p-6">
-                <div class="flex flex-col items-center justify-center py-8 text-center">
-                    <span
-                        class="flex h-16 w-16 items-center justify-center rounded-full bg-bg-surface text-content-sub">
-                        <i class="bi bi-megaphone text-3xl"></i>
-                    </span>
-                    <p class="mt-4 text-sm font-medium text-content-sub">Belum ada pengumuman saat ini.</p>
-                </div>
-            </div>
-        </section>
+        </div>
 
     </div>
 </x-mahasiswa-layout>

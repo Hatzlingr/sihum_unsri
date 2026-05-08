@@ -36,23 +36,23 @@
                     <div class="flex flex-col gap-1 border-b border-border-soft pb-3">
                         <span class="text-xs text-content-sub uppercase tracking-wider">Nomor Kamar</span>
                         <span
-                            class="font-semibold text-content-main">{{ $penempatan?->kamar?->nomor_kamar ?? '--' }}</span>
+                            class="font-semibold text-content-main">{{ $penempatan?->kamar?->nomor_kamar ?? '-' }}</span>
                     </div>
                     <div class="flex flex-col gap-1 border-b border-border-soft pb-3">
                         <span class="text-xs text-content-sub uppercase tracking-wider">Tipe & Kapasitas</span>
                         <span class="font-semibold text-content-main">
-                            {{ $penempatan?->kamar?->hunian?->tipe ?? '--' }}
-                            ({{ $penempatan?->kamar?->kapasitas ?? '0' }} Orang)
+                            {{ $penempatan?->kamar?->hunian?->tipe ?? '-' }}
+                            | {{ $penempatan?->kamar?->kapasitas ?? '0' }} Orang
                         </span>
                     </div>
                     <div class="flex flex-col gap-1 border-b border-border-soft pb-3">
                         <span class="text-xs text-content-sub uppercase tracking-wider">Lantai</span>
-                        <span class="font-semibold text-content-main">{{ $penempatan?->kamar?->lantai ?? '--' }}</span>
+                        <span class="font-semibold text-content-main">{{ $penempatan?->kamar?->lantai ?? '-' }}</span>
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="text-xs text-content-sub uppercase tracking-wider">Lokasi</span>
                         <span
-                            class="text-sm text-content-main">{{ $penempatan?->kamar?->hunian?->lokasi ?? '--' }}</span>
+                            class="text-sm text-content-main">{{ $penempatan?->kamar?->hunian?->lokasi ?? '-' }}</span>
                     </div>
                 </div>
             </section>
