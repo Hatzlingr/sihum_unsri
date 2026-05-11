@@ -70,9 +70,11 @@
                 </table>
             </div>
 
-            <div class="border-t border-border-soft px-5 pb-5">
-                <x-admin.pagination :paginator="$logsSource" />
-            </div>
+            @if ($logsSource && method_exists($logsSource, 'links'))
+                <div class="border-t border-border-soft px-5 pb-5">
+                    <x-admin.pagination :paginator="$logsSource" />
+                </div>
+            @endif
         </x-admin.panel>
     </div>
 </x-admin-layout>

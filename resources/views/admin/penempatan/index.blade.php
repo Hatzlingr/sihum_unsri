@@ -11,6 +11,8 @@
         x-data="{
             modalOpen: false,
             assignTemplate: @js($assignTemplate),
+            selectedFloor: 'all',
+            selectedRoom: null,
             detail: {
                 id: null,
                 nama: '-',
@@ -23,6 +25,8 @@
             },
             openModal(payload) {
                 this.detail = { ...this.detail, ...payload };
+                this.selectedFloor = 'all';
+                this.selectedRoom = null;
                 this.modalOpen = true;
             },
             closeModal() {
@@ -32,6 +36,18 @@
                 return this.assignTemplate === '#'
                     ? '#'
                     : this.assignTemplate.replace('__ID__', this.detail.id ?? '');
+            },
+            get floors() {
+                const floors = this.detail.rooms
+                    .map(room => room.lantai)
+                    .filter(value => value !== null && value !== undefined && value !== '-');
+                return [...new Set(floors)];
+            },
+            get filteredRooms() {
+                if (this.selectedFloor === 'all') {
+                    return this.detail.rooms;
+                }
+                return this.detail.rooms.filter(room => String(room.lantai) === String(this.selectedFloor));
             },
         }"
         class="space-y-6"
@@ -84,8 +100,14 @@
                                     <p class="mt-3 text-sm font-semibold text-content-main">{{ data_get($student, 'jenis_kelamin', data_get($student, 'gender', '-')) }}</p>
                                     <p class="mt-2 text-sm font-semibold text-content-main">{{ data_get($hunian, 'nama_hunian', '-') }}</p>
                                 </div>
-                                <x-admin.action-button type="button" variant="secondary" icon="bi-pin-map" @click="openModal(payload)">Penempatan</x-admin.action-button>
-                            </div>
+                                            <button
+                                                type="button"
+                                                class="inline-flex items-center justify-center gap-2 rounded-2xl border border-border-soft bg-bg-base px-4 py-2.5 text-sm font-semibold text-content-main transition hover:border-brand hover:bg-brand-light hover:text-brand"
+                                                @click='openModal(@json($detailPayload))'
+                                            >
+                                                <i class="bi bi-eye"></i>
+                                                <span>Detail</span>
+                                            </button>                              </div>
                         </div>
                     @empty
                         <x-admin.skeleton-list :rows="8" height="h-12" />
@@ -135,29 +157,71 @@
 
                     <form method="POST" x-bind:action="assignAction()" class="border-t border-border-soft p-5 sm:p-6">
                         @csrf
-                        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            <template x-for="room in detail.rooms" :key="room.id">
-                                <label
-                                    class="cursor-pointer rounded-3xl border border-border-soft bg-bg-surface p-4 transition hover:border-brand hover:bg-brand-light"
-                                    :class="room.available ? '' : 'opacity-60 cursor-not-allowed'"
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="text-sm text-content-sub">
+                                Pilih lantai terlebih dahulu, lalu tentukan kamar.
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="text-xs font-semibold uppercase tracking-wide text-content-sub">Filter Lantai</label>
+                                <select
+                                    x-model="selectedFloor"
+                                    class="h-10 rounded-2xl border border-border-soft bg-bg-base px-4 text-sm outline-none transition focus:border-brand focus:ring-4 focus:ring-brand-soft"
                                 >
-                                    <input type="radio" name="kamar_id" :value="room.id" class="sr-only peer" :disabled="!room.available">
-                                    <div class="flex items-start justify-between gap-3">
-                                        <div>
-                                            <p class="text-lg font-bold text-content-main">Kamar <span x-text="room.nomor"></span></p>
-                                            <p class="mt-1 text-sm text-content-sub">
-                                                <span x-text="room.terisi"></span>/<span x-text="room.kapasitas"></span> penghuni · Lantai <span x-text="room.lantai"></span>
-                                            </p>
-                                        </div>
-                                        <span class="text-xs font-semibold" :class="room.available ? 'text-emerald-700' : 'text-content-sub'" x-text="room.status"></span>
-                                    </div>
-                                </label>
-                            </template>
-                            <template x-if="detail.rooms.length === 0">
-                                <div class="rounded-3xl border border-dashed border-border-soft bg-bg-surface p-6 text-center text-sm text-content-sub">
-                                    Tidak ada kamar tersedia untuk hunian ini.
-                                </div>
-                            </template>
+                                    <option value="all">Semua</option>
+                                    <template x-for="floor in floors" :key="floor">
+                                        <option :value="floor" x-text="'Lantai ' + floor"></option>
+                                    </template>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="min-w-full text-left text-sm">
+                                <thead class="border-b border-border-soft text-xs uppercase tracking-wide text-content-sub">
+                                    <tr>
+                                        <th class="py-3 px-2">Pilih</th>
+                                        <th class="py-3 px-2">Nomor</th>
+                                        <th class="py-3 px-2">Lantai</th>
+                                        <th class="py-3 px-2">Kapasitas</th>
+                                        <th class="py-3 px-2">Terisi</th>
+                                        <th class="py-3 px-2">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-border-soft">
+                                    <template x-for="room in filteredRooms" :key="room.id">
+                                        <tr :class="selectedRoom === room.id ? 'bg-brand-light' : ''">
+                                            <td class="py-3 px-2">
+                                                <input
+                                                    type="radio"
+                                                    name="kamar_id"
+                                                    :value="room.id"
+                                                    x-model="selectedRoom"
+                                                    :disabled="!room.available"
+                                                    class="h-4 w-4 rounded border-border-soft text-brand focus:ring-brand"
+                                                >
+                                            </td>
+                                            <td class="py-3 px-2 font-semibold text-content-main" x-text="room.nomor"></td>
+                                            <td class="py-3 px-2 text-content-sub" x-text="room.lantai"></td>
+                                            <td class="py-3 px-2 text-content-sub" x-text="room.kapasitas"></td>
+                                            <td class="py-3 px-2 text-content-sub" x-text="room.terisi"></td>
+                                            <td class="py-3 px-2">
+                                                <span
+                                                    class="text-xs font-semibold"
+                                                    :class="room.available ? 'text-emerald-700' : 'text-content-sub'"
+                                                    x-text="room.status"
+                                                ></span>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <template x-if="filteredRooms.length === 0">
+                                        <tr>
+                                            <td colspan="6" class="py-4 text-center text-content-sub">
+                                                Tidak ada kamar tersedia untuk lantai ini.
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
                         </div>
 
                         <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">

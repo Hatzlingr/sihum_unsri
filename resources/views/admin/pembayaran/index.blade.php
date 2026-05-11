@@ -124,8 +124,7 @@
                         <button
                             type="button"
                             class="mb-3 block w-full rounded-2xl border border-border-soft bg-bg-surface px-4 py-3 text-left transition last:mb-0 hover:border-brand hover:bg-brand-light"
-                            x-data="{ payload: {{ \Illuminate\Support\Js::from($detailPayload) }} }"
-                            @click="openModal(payload)"
+                            @click='openModal(@json($detailPayload))'
                         >
                             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
@@ -139,7 +138,9 @@
                         <x-admin.skeleton-list :rows="11" height="h-12" />
                     @endforelse
 
-                    <x-admin.pagination :paginator="$pembayaranSource" />
+                    @if ($pembayaranSource && method_exists($pembayaranSource, 'links'))
+                        <x-admin.pagination :paginator="$pembayaranSource" />
+                    @endif
                 </div>
             </x-admin.panel>
 

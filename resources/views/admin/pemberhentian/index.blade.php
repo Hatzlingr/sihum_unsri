@@ -22,12 +22,21 @@
         ['label' => 'Ditolak', 'status' => 'Ditolak', 'icon' => 'bi-x-circle'],
     ];
 
+    $approveTemplate = \Illuminate\Support\Facades\Route::has('admin.pemberhentian.approve')
+        ? route('admin.pemberhentian.approve', ['id' => '__ID__'])
+        : '#';
+    $rejectTemplate = \Illuminate\Support\Facades\Route::has('admin.pemberhentian.reject')
+        ? route('admin.pemberhentian.reject', ['id' => '__ID__'])
+        : '#';
+
 @endphp
 
 <x-admin-layout title="Pemberhentian" page-title="Pemberhentian" active="pemberhentian">
     <div
         x-data="{
             modalOpen: false,
+            approveTemplate: @js($approveTemplate),
+            rejectTemplate: @js($rejectTemplate),
             detail: {
                 id: null,
                 nama: '-',
@@ -46,6 +55,16 @@
             },
             closeModal() {
                 this.modalOpen = false;
+            },
+            approveAction() {
+                return this.approveTemplate === '#'
+                    ? '#'
+                    : this.approveTemplate.replace('__ID__', this.detail.id ?? '');
+            },
+            rejectAction() {
+                return this.rejectTemplate === '#'
+                    ? '#'
+                    : this.rejectTemplate.replace('__ID__', this.detail.id ?? '');
             },
         }"
         class="space-y-6"
@@ -76,29 +95,27 @@
                 <div class="p-4 sm:p-5">
                     @forelse (($filteredItems->isNotEmpty() ? $filteredItems : $pemberhentianItems) as $item)
                         @php
-                            // Logic: field mapping below should follow the real model relations once available.
                             $id = data_get($item, 'id_pemberhentian', data_get($item, 'id'));
                             $berkasUrl = method_exists($item, 'getBerkasUrl')
                                 ? $item->getBerkasUrl()
                                 : (data_get($item, 'berkas_path') ? asset('storage/' . data_get($item, 'berkas_path')) : null);
                             $detailPayload = [
                                 'id' => $id,
-                                'nama' => data_get($item, 'mahasiswa.nama', data_get($item, 'penempatan.pendaftaran.mahasiswa.nama', '-')),
-                                'nim' => data_get($item, 'mahasiswa.nim', data_get($item, 'penempatan.pendaftaran.mahasiswa.nim', '-')),
-                                'hunian' => data_get($item, 'hunian.nama_hunian', data_get($item, 'penempatan.hunian.nama_hunian', '-')),
-                                'kamar' => data_get($item, 'kamar.nomor_kamar', data_get($item, 'penempatan.kamar.nomor_kamar', '-')),
-                                'tgl_ajuan' => optional(data_get($item, 'tgl_ajuan', data_get($item, 'tgl_pengajuan')))->format('d M Y') ?? '-',
-                                'tgl_berhenti' => optional(data_get($item, 'tgl_berhenti', data_get($item, 'tanggal_berhenti')))->format('d M Y') ?? '-',
+                                'nama' => data_get($item, 'mahasiswa.nama', '-'),
+                                'nim' => data_get($item, 'mahasiswa.nim', '-'),
+                                'hunian' => data_get($item, 'penempatan.kamar.hunian.nama_hunian', '-'),
+                                'kamar' => data_get($item, 'penempatan.kamar.nomor_kamar', '-'),
+                                'tgl_ajuan' => optional(data_get($item, 'tgl_ajuan'))->format('d M Y') ?? '-',
+                                'tgl_berhenti' => optional(data_get($item, 'tgl_berhenti'))->format('d M Y') ?? '-',
                                 'alasan' => data_get($item, 'alasan', '-'),
-                                'status' => $statusResolver($item),
+                                'status' => data_get($item, 'status', 'Pending'),
                                 'berkas_url' => $berkasUrl,
                             ];
                         @endphp
                         <button
                             type="button"
                             class="mb-3 block w-full rounded-2xl border border-border-soft bg-bg-surface px-4 py-3 text-left transition last:mb-0 hover:border-brand hover:bg-brand-light"
-                            x-data="{ payload: {{ \Illuminate\Support\Js::from($detailPayload) }} }"
-                            @click="openModal(payload)"
+                            @click='openModal(@json($detailPayload))'
                         >
                             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
@@ -112,7 +129,9 @@
                         <x-admin.skeleton-list :rows="10" height="h-12" />
                     @endforelse
 
-                    <x-admin.pagination :paginator="$pemberhentianSource" />
+                    @if ($pemberhentianSource && method_exists($pemberhentianSource, 'links'))
+                        <x-admin.pagination :paginator="$pemberhentianSource" />
+                    @endif
                 </div>
             </x-admin.panel>
         </section>
@@ -184,14 +203,20 @@
                     </div>
 
                     <div class="flex flex-col gap-3 p-5 sm:flex-row sm:justify-end sm:p-6">
-                        {{-- Logic: on approve, backend should mark the latest penempatan as keluar and set tanggal_keluar. --}}
                         <template x-if="detail.status === 'Pending'">
                             <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
-                                <x-admin.action-button type="button" icon="bi-check-lg">Setujui</x-admin.action-button>
-                                <x-admin.action-button type="button" variant="danger" icon="bi-x-lg">Tolak</x-admin.action-button>
+                                <form method="POST" x-bind:action="approveAction()">
+                                    @csrf
+                                    @method('PATCH')
+                                    <x-admin.action-button type="submit" icon="bi-check-lg">Setujui</x-admin.action-button>
+                                </form>
+                                <form method="POST" x-bind:action="rejectAction()">
+                                    @csrf
+                                    @method('PATCH')
+                                    <x-admin.action-button type="submit" variant="danger" icon="bi-x-lg">Tolak</x-admin.action-button>
+                                </form>
                             </div>
                         </template>
-                        {{-- Logic: if already decided, no further action is allowed from UI. --}}
                         <template x-if="detail.status !== 'Pending'">
                             <x-admin.action-button type="button" variant="secondary" icon="bi-x-lg" @click="closeModal()">Tutup</x-admin.action-button>
                         </template>
