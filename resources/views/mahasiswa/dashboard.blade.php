@@ -33,7 +33,7 @@
                     <div class="min-w-0">
                         <p class="text-sm font-medium text-content-sub">Status Hunian</p>
                         <p class="mt-3 text-2xl font-bold tracking-tight text-content-main">
-                            {{ $penempatan->status_hunian ?? 'Belum ada' }}
+                            {{ $penempatan?->status ?? 'Belum ada' }}
                         </p>
                     </div>
                     <span
