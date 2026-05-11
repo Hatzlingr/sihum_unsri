@@ -133,7 +133,9 @@
                         <x-admin.skeleton-list :rows="10" height="h-12" />
                     @endforelse
 
-                    <x-admin.pagination :paginator="$pendaftaranSource" />
+                    @if ($pendaftaranSource && method_exists($pendaftaranSource, 'links'))
+                        <x-admin.pagination :paginator="$pendaftaranSource" />
+                    @endif
                 </div>
             </x-admin.panel>
 

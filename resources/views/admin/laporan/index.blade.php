@@ -5,6 +5,15 @@
         ['label' => 'Pendaftaran Disetujui', 'value' => $pendaftaranDisetujui ?? 0, 'icon' => 'bi-check-circle'],
         ['label' => 'Kamar Tersedia', 'value' => $kamarTersedia ?? 0, 'icon' => 'bi-door-open'],
     ];
+
+    // TODO(back-end): Provide $nunggakPenempatan as paginator/collection with fields:
+    // - mahasiswa.nama, mahasiswa.nim
+    // - kamar.hunian.nama_hunian, kamar.nomor_kamar
+    // - tgl_keluar (date), status
+    // Optional: $cutoffDate for the cutoff info text below.
+    $nunggakSource = $nunggakPenempatan ?? collect();
+    $nunggakItems = method_exists($nunggakSource, 'items') ? collect($nunggakSource->items()) : collect($nunggakSource);
+    $cutoffDate = $cutoffDate ?? null;
 @endphp
 
 <x-admin-layout title="Laporan" page-title="Laporan" active="laporan">
@@ -77,6 +86,53 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </x-admin.panel>
+
+        <x-admin.panel title="Keterlambatan Perpanjangan Masa Tinggal" icon="bi-exclamation-triangle">
+            <div class="flex flex-col gap-2 text-sm text-content-sub">
+                <p>
+                    Menampilkan penghuni yang masa tinggalnya telah berakhir dan belum ada pengajuan
+                    perpanjangan, pemberhentian, atau pembayaran setelahnya.
+                </p>
+            </div>
+
+            <div class="mt-4 overflow-x-auto">
+                <table class="min-w-full text-left text-sm">
+                    <thead class="border-b border-border-soft text-xs uppercase tracking-wide text-content-sub">
+                        <tr>
+                            <th class="py-3 px-2">Mahasiswa</th>
+                            <th class="py-3 px-2">NIM</th>
+                            <th class="py-3 px-2">Hunian / Kamar</th>
+                            <th class="py-3 px-2">Periode Akhir</th>
+                            <th class="py-3 px-2">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border-soft">
+                        @forelse ($nunggakItems as $item)
+                            @php
+                                $mahasiswa = data_get($item, 'mahasiswa', data_get($item, 'pendaftaran.mahasiswa'));
+                                $hunian = data_get($item, 'kamar.hunian');
+                                $kamar = data_get($item, 'kamar');
+                            @endphp
+                            <tr>
+                                <td class="py-3 px-2 font-semibold text-content-main">{{ data_get($mahasiswa, 'nama', '-') }}</td>
+                                <td class="py-3 px-2 text-content-sub">{{ data_get($mahasiswa, 'nim', '-') }}</td>
+                                <td class="py-3 px-2 text-content-sub">
+                                    {{ data_get($hunian, 'nama_hunian', '-') }}
+                                    <span class="text-content-sub">·</span>
+                                    {{ data_get($kamar, 'nomor_kamar', '-') }}
+                                </td>
+                                <td class="py-3 px-2 text-content-sub">{{ optional(data_get($item, 'tgl_keluar'))->format('d M Y') ?? '-' }}</td>
+                                <td class="py-3 px-2">
+                                    <x-admin.status-badge :status="data_get($item, 'status', '-')" />
+                                </td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="5" class="py-4 text-center text-content-sub">Tidak ada data keterlambatan.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </x-admin.panel>
     </div>

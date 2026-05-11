@@ -52,7 +52,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="border-t border-border-soft px-5 pb-5"><x-admin.pagination :paginator="$hunianSource" /></div>
+            @if ($hunianSource && method_exists($hunianSource, 'links'))
+                <div class="border-t border-border-soft px-5 pb-5"><x-admin.pagination :paginator="$hunianSource" /></div>
+            @endif
         </x-admin.panel>
     </div>
 </x-admin-layout>

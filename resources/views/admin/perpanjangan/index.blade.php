@@ -78,14 +78,22 @@
                                     'alasan' => data_get($item, 'alasan', '-'),
                                 ];
                             @endphp
-                            <tr class="transition hover:bg-brand-light/50" x-data="{ payload: {{ \Illuminate\Support\Js::from($detailPayload) }} }">
+                            <tr class="transition hover:bg-brand-light/50">
                                 <td class="px-5 py-4 font-semibold text-content-main">{{ $detailPayload['mahasiswa'] }}</td>
                                 <td class="px-5 py-4 text-content-sub">{{ $detailPayload['durasi_bulan'] }} bulan</td>
                                 <td class="px-5 py-4 text-content-sub">{{ $detailPayload['tgl_ajuan'] }}</td>
                                 <td class="px-5 py-4 text-content-sub">{{ $detailPayload['tgl_keluar_baru'] }}</td>
                                 <td class="px-5 py-4"><x-admin.status-badge :status="$detailPayload['status']" /></td>
                                 <td class="px-5 py-4">
-                                    <x-admin.action-button type="button" variant="secondary" icon="bi-eye" @click="openModal(payload)">Detail</x-admin.action-button>
+                                    <button
+                                        type="button"
+                                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-border-soft bg-bg-base px-4 py-2.5 text-sm font-semibold text-content-main transition hover:border-brand hover:bg-brand-light hover:text-brand"
+                                        x-on:click="openModal(JSON.parse($el.dataset.detail))"
+                                        data-detail='@json($detailPayload)'
+                                    >
+                                        <i class="bi bi-eye"></i>
+                                        <span>Detail</span>
+                                    </button>
                                 </td>
                             </tr>
                         @empty
@@ -94,7 +102,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="border-t border-border-soft px-5 pb-5"><x-admin.pagination :paginator="$perpanjanganSource" /></div>
+            @if ($perpanjanganSource && method_exists($perpanjanganSource, 'links'))
+                <div class="border-t border-border-soft px-5 pb-5"><x-admin.pagination :paginator="$perpanjanganSource" /></div>
+            @endif
         </x-admin.panel>
 
         <div

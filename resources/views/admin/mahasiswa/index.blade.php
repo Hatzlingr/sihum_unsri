@@ -92,13 +92,12 @@
                                         <div class="flex items-center gap-2">
                                             <button
                                                 type="button"
-                                                class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border-soft text-content-sub transition hover:border-brand hover:bg-brand-light hover:text-brand"
-                                                aria-label="Detail mahasiswa"
+                                                class="inline-flex items-center justify-center gap-2 rounded-2xl border border-border-soft bg-bg-base px-4 py-2.5 text-sm font-semibold text-content-main transition hover:border-brand hover:bg-brand-light hover:text-brand"
                                                 @click='openModal(@json($detailPayload))'
                                             >
-                                                <i class="bi bi-info-circle"></i>
-                                            </button>
-                                            <a
+                                                <i class="bi bi-eye"></i>
+                                                <span>Detail</span>
+                                            </button>                                            <a
                                                 href="{{ $safeRouteWithParam('admin.mahasiswa.edit', $id, '/admin/mahasiswa/' . $id . '/edit') }}"
                                                 class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border-soft text-content-sub transition hover:border-brand hover:bg-brand-light hover:text-brand"
                                                 aria-label="Edit mahasiswa"
@@ -126,9 +125,11 @@
                     </table>
                 </div>
 
-                <div class="border-t border-border-soft px-5 pb-5">
-                    <x-admin.pagination :paginator="$mahasiswaSource" />
-                </div>
+                @if ($mahasiswaSource && method_exists($mahasiswaSource, 'links'))
+                    <div class="border-t border-border-soft px-5 pb-5">
+                        <x-admin.pagination :paginator="$mahasiswaSource" />
+                    </div>
+                @endif
             </x-admin.panel>
         </section>
 
